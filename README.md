@@ -14,7 +14,7 @@
 ## 2. 整体架构
 根据目前设计，基础架构充分借助spring cloud体系，保障未来五年左右的产品技术架构支撑。
 架构图如下：
-![此处输入图片的描述][1]
+![技术架构图](https://raw.githubusercontent.com/asan3524/yiran/master/static/images/%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84.jpg)
 
 
 ## 3. 版本计划
@@ -23,4 +23,4 @@
 Features:
 
 
-  [1]: yiran/static/images/%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84.jpg
+  [1]: https://github.com/asan3524/yiran/blob/master/static/images/%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84.jpg
