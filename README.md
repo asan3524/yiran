@@ -20,17 +20,19 @@
 ## 3. 版本计划
 
 ### 3.1. V.1.0
-Time: 2019-03-18 to 2019-03-22
-Features:
-    - 高可用注册中心，并基于docker发布
-    - 动态配置中心服务，并基于docker发布；基于springboot的动态配置使用demo
-    - 基于springboot的JPA+druid最佳实践
+
+-   Time: 2019-03-18 to 2019-03-22
+-   Features:
+    -   高可用注册中心，并基于docker发布
+    -   动态配置中心服务，并基于docker发布；基于springboot的动态配置使用demo
+    -   基于springboot的JPA+druid最佳实践
 
 ### 3.1. V.1.0
-Time: 2019-03-25 to 2019-03-29
-Features:
-    - 微服务监控及聚合服务实现（hystrix+turbine）
-    - 基于微服务的服务跟踪实现（sleuth）
-    - 日志分析服务，并基于docker发布
+
+-   Time: 2019-03-25 to 2019-03-29
+-   Features:
+    -   微服务监控及聚合服务实现（hystrix+turbine）
+    -   基于微服务的服务跟踪实现（sleuth）
+    -   日志分析服务，并基于docker发布
     
   [1]: https://raw.githubusercontent.com/asan3524/yiran/master/static/images/%E5%9F%BA%E7%A1%80%E6%8A%80%E6%9C%AF%E6%9E%B6%E6%9E%84.jpg
