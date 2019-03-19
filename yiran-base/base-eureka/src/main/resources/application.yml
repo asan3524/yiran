@@ -1,0 +1,45 @@
+# 单机模式配置
+spring:
+  application:
+    name: ddsh-base-eureka-server
+  security:
+    user:
+      name: admin
+      password: admin
+server:
+  port: 8761
+eureka:
+  client:
+    register-with-eureka: false
+    fetch-registry: false
+    service-url:
+      defaultZone: http://localhost:${server.port}/eureka/
+logging:
+  level:
+    org.springframework.web: INFO
+# 集群模式配置
+#spring:
+#  application:
+#    name: springcloud.eureka.server
+#---
+#spring:
+#  profiles: server1.eureka.com
+#server:
+#  port: 8761
+#eureka:
+#  instance:
+#    hostname: server1.eureka.com
+#  client:
+#    service-url:
+#      defaultZone: http://server2.eureka.com:8762/eureka/
+#---
+#spring:
+#  profiles: server2.eureka.com
+#server:
+#  port: 8762
+#eureka:
+#  instance:
+#    hostname: server2.eureka.com
+#  client:
+#    service-url:
+#      defaultZone: http://server1.eureka.com:8761/eureka/

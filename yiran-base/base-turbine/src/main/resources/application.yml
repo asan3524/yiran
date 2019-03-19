@@ -1,0 +1,19 @@
+server:
+  port: 8989
+management:
+ server:
+    port: 8990
+ endpoints:
+    web:
+      exposure:
+        include: health, info, refresh, bus
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:admin@localhost:8761/eureka/
+  instance:
+    lease-renewal-interval-in-seconds: 10
+    non-secure-port: ${PORT:8989}
+turbine:
+  app-config: spring-boot-demo,ddsh-base-eureka-server,ddsh-base-config-server
+  clusterNameExpression: "'default'"

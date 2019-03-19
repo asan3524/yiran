@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: ddsh-base-turbine-server
+  profiles:
+    active:
+      - develop
+  cloud:
+    config:
+      uri:
+        - http://localhost:8888/
+      profile: develop
+      label: master
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest

@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+
+	<artifactId>yiran-base</artifactId>
+	<packaging>pom</packaging>
+
+	<parent>
+		<groupId>com.yiran</groupId>
+		<artifactId>yiran-parent</artifactId>
+		<version>1.0.0</version>
+		<relativePath>../yiran-parent</relativePath>
+	</parent>
+
+	<modules>
+		<module>base-config</module>
+		<module>base-eureka</module>
+		<module>base-hystrix</module>
+		<module>base-turbine</module>
+	</modules>
+
+	<name>yiran-base</name>
+	<description>yiran-base</description>
+</project>
