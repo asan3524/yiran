@@ -52,9 +52,7 @@
 -   **Version: V.0.0.3**
 -   **Time: 2019-04-01 to 2019-04-04**
 -   **Features:**
-    -   分布式缓存组件+基于redisson分布式锁组件实现（redis集群模式）
-    -   微服务负载均衡（ribbon + feign）最佳实践
-    -   基于JWT令牌的有状态服务调用（扩展JWT令牌并预留扩展接口）
+    -   分布式缓存组件+基于redisson分布式锁组件实现（redis集群模式））
     -   微服务网关（zuul or gateway）选型及最佳实践
     -   基于springboot+security的安全防护最佳实践
 
@@ -62,6 +60,8 @@
 -   **Version: V.1.0.0**
 -   **Time: 2019-04-08 to 2019-04-12**
 -   **Features:**
+    -   微服务负载均衡（ribbon + feign）最佳实践
+    -   基于JWT令牌的有状态服务调用（扩展JWT令牌并预留扩展接口
     -   微服务脚手架整合
     -   微服务消息(事件)驱动（spring cloud stream + rabbit）实现
     -   微服务接口ssl方案
