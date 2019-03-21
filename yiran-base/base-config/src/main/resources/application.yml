@@ -1,9 +1,45 @@
-server:
-  port: 8888
+# 单机模式配置
+---
+spring:
+  profiles: develop
+  cloud:
+    config:
+      server:
+        git:
+          uri: http://192.168.40.160/lsb/config
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
 eureka:
   client:
     service-url:
       defaultZone: http://admin:admin@localhost:8761/eureka/
+management:
+ endpoints:
+    web:
+      exposure:
+        include: health, info, refresh, bus
+        
+# 集群模式配置
+---
+spring:
+  profiles: production
+  cloud:
+    config:
+      server:
+        git:
+          uri: http://192.168.40.160/lsb/config
+  rabbitmq:
+    host: rabbitmq.base.svc.cluster.local
+    port: 5672
+    username: guest
+    password: guest
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:admin@yiran-base-eureka-server-s1.base.svc.cluster.local:8761/eureka/, http://admin:admin@yiran-base-eureka-server-s2.base.svc.cluster.local:${server.port}/eureka/
 management:
  endpoints:
     web:

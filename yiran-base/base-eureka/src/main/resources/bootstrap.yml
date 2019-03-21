@@ -1,0 +1,12 @@
+server:
+  port: 8761
+  
+spring:
+  application:
+    name: yiran-base-eureka-server
+  security:
+    user:
+      name: admin
+      password: admin
+  profiles:
+    active: develop

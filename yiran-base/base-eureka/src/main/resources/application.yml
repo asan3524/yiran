@@ -1,45 +1,54 @@
 # 单机模式配置
+---
 spring:
-  application:
-    name: ddsh-base-eureka-server
-  security:
-    user:
-      name: admin
-      password: admin
-server:
-  port: 8761
+  profiles: develop
 eureka:
+  instance:
+    prefer-ip-address: true
   client:
     register-with-eureka: false
     fetch-registry: false
     service-url:
-      defaultZone: http://localhost:${server.port}/eureka/
+      defaultZone: http://127.0.0.1:${server.port}/eureka/
 logging:
   level:
     org.springframework.web: INFO
+
 # 集群模式配置
-#spring:
-#  application:
-#    name: springcloud.eureka.server
+---
+spring:
+  profiles: production
+
+logging:
+  level:
+    org.springframework.web: INFO
+
+---
+spring:
+  profiles: s1 
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://admin:admin@yiran-base-eureka-server-s2.base.svc.cluster.local:${server.port}/eureka/
+---
+spring:
+  profiles: s2
+eureka:
+  client:
+    register-with-eureka: true
+    fetch-registry: true
+    service-url:
+      defaultZone: http://admin:admin@yiran-base-eureka-server-s1.base.svc.cluster.local:${server.port}/eureka/
+
 #---
 #spring:
-#  profiles: server1.eureka.com
-#server:
-#  port: 8761
+#  profiles: s3
 #eureka:
-#  instance:
-#    hostname: server1.eureka.com
 #  client:
+#    register-with-eureka: true
+#    fetch-registry: true
 #    service-url:
-#      defaultZone: http://server2.eureka.com:8762/eureka/
-#---
-#spring:
-#  profiles: server2.eureka.com
-#server:
-#  port: 8762
-#eureka:
-#  instance:
-#    hostname: server2.eureka.com
-#  client:
-#    service-url:
-#      defaultZone: http://server1.eureka.com:8761/eureka/
+#      defaultZone: http://admin:admin@yiran-base-eureka-server-s1.base.svc.cluster.local:${server.port}/eureka/, http://admin:admin@yiran-base-eureka-server-s3.base.svc.cluster.local:${server.port}/eureka/
+      
