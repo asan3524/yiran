@@ -4,7 +4,7 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>base-turbine</artifactId>
+	<artifactId>demo-provider</artifactId>
 
 	<parent>
 		<groupId>com.yiran</groupId>
@@ -12,8 +12,8 @@
 		<version>1.0.0</version>
 	</parent>
 
-	<name>base-turbine</name>
-	<description>base-turbine</description>
+	<name>demo-provider</name>
+	<description>demo-provider</description>
 	
 	<dependencies>
 		<dependency>
@@ -37,13 +37,4 @@
 			<artifactId>spring-cloud-starter-bus-amqp</artifactId>
 		</dependency>
 	</dependencies>
-	
-	<build>
-		<plugins>
-			<plugin>
-				<groupId>org.springframework.boot</groupId>
-				<artifactId>spring-boot-maven-plugin</artifactId>
-			</plugin>
-		</plugins>
-	</build>
 </project>

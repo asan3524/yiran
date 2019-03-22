@@ -3,6 +3,6 @@ server:
   
 spring:
   application:
-    name: yiran-base-config-server
+    name: yiran-base-config
   profiles:
     active: develop

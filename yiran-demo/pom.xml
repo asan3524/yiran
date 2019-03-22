@@ -3,7 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<artifactId>yiran-base</artifactId>
+	<artifactId>yiran-demo</artifactId>
 	<packaging>pom</packaging>
 
 	<parent>
@@ -14,13 +14,11 @@
 	</parent>
 
 	<modules>
-		<module>base-config</module>
-		<module>base-eureka</module>
-		<module>base-turbine</module>
-		<module>base-oauth2</module>
-		<module>base-zipkin</module>
+		<module>demo-consumer</module>
+		<module>demo-provider</module>
+		<module>demo-gateway</module>
 	</modules>
 
-	<name>yiran-base</name>
-	<description>yiran-base</description>
+	<name>yiran-demo</name>
+	<description>yiran-demo</description>
 </project>
