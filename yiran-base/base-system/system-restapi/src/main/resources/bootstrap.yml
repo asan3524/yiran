@@ -1,0 +1,8 @@
+server:
+  port: 8088
+  
+spring:
+  application:
+    name: yiran-system-restapi
+  profiles:
+    active: develop

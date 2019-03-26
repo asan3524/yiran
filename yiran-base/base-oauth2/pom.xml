@@ -6,9 +6,10 @@
 	<artifactId>base-oauth2</artifactId>
 
 	<parent>
-		<groupId>com.yiran</groupId>
+		<groupId>com.yiran.base</groupId>
 		<artifactId>yiran-base</artifactId>
 		<version>1.0.0</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>base-oauth2</name>
@@ -21,15 +22,20 @@
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-security</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-config-client</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
 			<artifactId>spring-cloud-starter-bus-amqp</artifactId>
+		</dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-thymeleaf</artifactId>
+        </dependency>
+		<dependency>
+			<groupId>com.yiran.base</groupId>
+			<artifactId>base-security</artifactId>
+			<version>${yiran.security.version}</version>
 		</dependency>
 	</dependencies>
 

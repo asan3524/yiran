@@ -1,4 +1,4 @@
-package com.yiran.base.oauth2.security;
+package com.yiran.base.oauth2.config;
 
 import java.util.Arrays;
 

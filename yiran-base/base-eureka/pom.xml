@@ -7,9 +7,10 @@
 	<artifactId>base-eureka</artifactId>
 
 	<parent>
-		<groupId>com.yiran</groupId>
+		<groupId>com.yiran.base</groupId>
 		<artifactId>yiran-base</artifactId>
 		<version>1.0.0</version>
+		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>base-eureka</name>

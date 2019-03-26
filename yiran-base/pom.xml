@@ -3,6 +3,7 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
+	<groupId>com.yiran.base</groupId>
 	<artifactId>yiran-base</artifactId>
 	<packaging>pom</packaging>
 
@@ -10,10 +11,19 @@
 		<groupId>com.yiran</groupId>
 		<artifactId>yiran-parent</artifactId>
 		<version>1.0.0</version>
-		<relativePath>../yiran-parent</relativePath>
 	</parent>
 
+	<properties>
+		<yiran.redis.version>0.0.1-SNAPSHOT</yiran.redis.version>
+		<yiran.core.version>0.0.1-SNAPSHOT</yiran.core.version>
+		<yiran.security.version>0.0.1-SNAPSHOT</yiran.security.version>
+		<yiran.system.version>0.0.1-SNAPSHOT</yiran.system.version>
+	</properties>
+	
 	<modules>
+		<module>base-core</module>
+		<module>base-security</module>
+		<module>base-system</module>
 		<module>base-config</module>
 		<module>base-eureka</module>
 		<module>base-turbine</module>

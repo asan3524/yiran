@@ -1,12 +1,11 @@
 server:
-  port: 8989
+  port: 8081
 
 spring:
   application:
-    name: yiran-base-turbine
+    name: yiran-demo-provider
   profiles:
-    active:
-      - develop
+    active: develop
 
 ---
 spring:
