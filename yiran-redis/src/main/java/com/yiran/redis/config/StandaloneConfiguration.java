@@ -2,6 +2,8 @@ package com.yiran.redis.config;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -20,6 +22,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @ConditionalOnProperty(name = "spring.redis.host")
 public class StandaloneConfiguration {
 
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 	@Resource
 	private StandaloneProperties standaloneProperties;
 
@@ -33,6 +36,7 @@ public class StandaloneConfiguration {
 	}
 
 	private JedisConnectionFactory connectionFactory() {
+		logger.info("redis create connectionFactory load {}", standaloneProperties.toString());
 		return new JedisConnectionFactory(standaloneConfiguration());
 	}
 

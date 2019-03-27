@@ -51,4 +51,10 @@ public class ClusterProperties {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	@Override
+	public String toString() {
+		return "ClusterProperties [clusterNodes=" + clusterNodes + ", timeout=" + timeout + ", redirects=" + redirects
+				+ ", password=" + password + "]";
+	}
 }

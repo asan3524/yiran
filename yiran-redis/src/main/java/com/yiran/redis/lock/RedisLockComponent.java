@@ -7,7 +7,7 @@ import org.slf4j.LoggerFactory;
 
 import com.yiran.redis.support.DistributedLockSupport;
 
-public class LockComponent implements DistributedLockSupport {
+public class RedisLockComponent implements DistributedLockSupport {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Override

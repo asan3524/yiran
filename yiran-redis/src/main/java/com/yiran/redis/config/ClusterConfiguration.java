@@ -23,7 +23,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 @Configuration
 @ConditionalOnProperty(name = "spring.redis.cluster.nodes")
 public class ClusterConfiguration {
-	protected final Logger logger = LoggerFactory.getLogger(this.getClass());
+	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Resource
 	private ClusterProperties clusterProperties;
@@ -37,6 +37,7 @@ public class ClusterConfiguration {
 	}
 
 	private JedisConnectionFactory connectionFactory() {
+		logger.info("redis create connectionFactory load {}", clusterProperties.toString());
 		return new JedisConnectionFactory(clusterConfiguration());
 	}
 

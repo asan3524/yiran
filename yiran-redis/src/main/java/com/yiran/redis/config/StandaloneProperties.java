@@ -40,4 +40,9 @@ public class StandaloneProperties {
 	public void setPassword(String password) {
 		this.password = password;
 	}
+
+	@Override
+	public String toString() {
+		return "StandaloneProperties [host=" + host + ", port=" + port + ", password=" + password + "]";
+	}
 }
