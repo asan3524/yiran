@@ -13,6 +13,8 @@
     - [base-eureka](#base-eureka)
     - [base-turbine](#base-turbine)
     - [base-zipkin](#base-zipkin)
+    - [base-oauth2](#base-oauth2)
+    - [base-system](#base-system)
 
 ## 概述
 
@@ -38,6 +40,8 @@
     -   默认端口为8888
     -   配置文件profiles include develop and production，默认为develop使用单机模式，生产和模拟测试环境中使用production
     -   使用git为配置文件仓库
+    -   配置文件规则如下：
+    servername-profiles.yml(示例：yiran-base-eureka-s1.yml)
     -   使用bus+rabbitmq进行配置更新消息通知
     -   打开bus-refresh端点，使用POST /actuator/bus-refresh刷新配置（webhooks中使用实现自动配置刷新）
     -   /actuator/bus-refresh基于bus通知所有监听的服务
@@ -75,8 +79,35 @@
 -   **Version: V.1.0.0**
 -   **Features:**
     -   默认端口为8887
-    -   主要用于基于jwt+oauth2的鉴权，资源控制服务
+    -   主要用于基于jwt+oauth2的鉴权，资源控制服务，单点登录服务
     -   配置文件profiles include develop and production，默认为develop使用单机模式，生产和模拟测试环境中使用production
-    -   此基础版本使用静态的账号、密码、角色，下一步的计划是基于redis+stream将账号、密码、角色、资源等数据存放在共享缓存，利用stream进行变更通知后重新加载
-    -   监控面板访问地址/hystrix
-    -   聚合流访问地址/turbine.stream
+    -   基于base-system用户管理服务进行身份认证及鉴权
+    -   自定义RedisClientDetailsServiceBuilder借助redis存储ClientDetails信息
+    -   自定义RedisTokenRepositoryImpl借助redis存储Token信息
+    -   自定义配置:
+            
+```
+配置默认登陆地址及权限例外路径等
+security:
+    oauth2:
+        authorization:
+            loginurl: /login
+            deniedurl: /deny
+            matchers: /images/**, /checkcode, /scripts/**, /styles/**            
+配置鉴权服务信息
+    client:
+        client-id: eagleeye
+        client-secret: thisissecret
+        authorized-grant-types: refresh_token, password, client_credentials
+        scope: webclient, mobileclient
+```
+
+---
+#### base-system
+-   **Version: V.1.0.0**
+-   **Features:**
+    -   系统管理微服务，提供用户、角色、权限管理等能力
+    -   为base-oauth2提供登录验证
+    -   为base-security提供角色检索
+
+    
