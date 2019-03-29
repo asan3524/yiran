@@ -1,4 +1,4 @@
-package com.yiran.base.security.config;
+package com.yiran.base.security;
 
 import java.util.List;
 import java.util.regex.Pattern;

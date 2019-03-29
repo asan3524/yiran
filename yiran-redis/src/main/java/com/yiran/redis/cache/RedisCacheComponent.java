@@ -1,5 +1,6 @@
 package com.yiran.redis.cache;
 
+import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
 import javax.annotation.Resource;
@@ -30,10 +31,11 @@ public class RedisCacheComponent<T> implements DistributedCacheSupport<T> {
 	}
 
 	@Override
-	public void set(String key, T value, Long expiry) {
+	public void set(String key, T value, Integer expiry) {
 		// TODO Auto-generated method stub
 		String v = objToJson(key, value);
 		BoundValueOperations<String, String> boundValueOperations = redisTemplate.boundValueOps(key);
+		boundValueOperations.expire(expiry, TimeUnit.SECONDS);
 		boundValueOperations.set(v, expiry);
 	}
 
@@ -47,12 +49,12 @@ public class RedisCacheComponent<T> implements DistributedCacheSupport<T> {
 	}
 
 	@Override
-	public void hashPut(String key, String hashKey, T hashValue, Long expiry) {
+	public void hashPut(String key, String hashKey, T hashValue, Integer expiry) {
 		// TODO Auto-generated method stub
 		checkRedisKey(key);
 		String v = objToJson(hashKey, hashValue);
 		BoundHashOperations<String, String, String> boundHashOperations = redisTemplate.boundHashOps(key);
-		boundHashOperations.expire(expiry, TimeUnit.MILLISECONDS);
+		boundHashOperations.expire(expiry, TimeUnit.SECONDS);
 		boundHashOperations.put(hashKey, v);
 	}
 
@@ -88,7 +90,13 @@ public class RedisCacheComponent<T> implements DistributedCacheSupport<T> {
 	}
 
 	@Override
-	public boolean hashDelete(String key, String hashKey) {
+	public long delete(Collection<String> key) {
+		// TODO Auto-generated method stub
+		return redisTemplate.delete(key);
+	}
+
+	@Override
+	public boolean hashDelete(String key, Object... hashKey) {
 		// TODO Auto-generated method stub
 		if (redisTemplate.hasKey(key)) {
 			BoundHashOperations<String, String, String> boundHashOperations = redisTemplate.boundHashOps(key);

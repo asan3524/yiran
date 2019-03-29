@@ -43,7 +43,7 @@ public class KindService {
 		// 保存缓存
 		if (CommonUtils.isNotNull(kind.getId())) {
 			String key = kind.getId().toString();
-			cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_KIND_ID, key, kind, 12000l);// 增加缓存，保存12秒
+			cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_KIND_ID, key, kind, 12);// 增加缓存，保存12秒
 		}
 	}
 
@@ -65,7 +65,7 @@ public class KindService {
 			Optional<Kind> temp = kindRepository.findById(id);
 			if (temp.isPresent()) {
 				kind = temp.get();
-				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_KIND_ID, id.toString(), kind, 12000l);
+				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_KIND_ID, id.toString(), kind, 12);
 			}
 		}
 		return kind;

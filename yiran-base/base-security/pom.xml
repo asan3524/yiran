@@ -23,18 +23,13 @@
 		</dependency>
 		<dependency>
 			<groupId>com.yiran.base</groupId>
-			<artifactId>system-object</artifactId>
-			<version>${yiran.system.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>com.yiran.base</groupId>
 			<artifactId>base-core</artifactId>
 			<version>${yiran.core.version}</version>
 		</dependency>
 		<dependency>
-			<groupId>com.yiran</groupId>
-			<artifactId>yiran-redis</artifactId>
-			<version>${yiran.redis.version}</version>
+			<groupId>com.yiran.base</groupId>
+			<artifactId>system-client</artifactId>
+			<version>${yiran.system.version}</version>
 		</dependency>
 	</dependencies>
 </project>

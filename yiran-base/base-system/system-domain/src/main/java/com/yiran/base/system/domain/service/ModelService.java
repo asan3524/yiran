@@ -44,7 +44,7 @@ public class ModelService {
 		// 保存缓存
 		if (!StringUtils.isEmpty(model.getId())) {
 			String key = model.getId().toString();
-			cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_MODEL_ID, key, model, 12000l);// 增加缓存，保存12秒
+			cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_MODEL_ID, key, model, 12);// 增加缓存，保存12秒
 		}
 	}
 
@@ -65,7 +65,7 @@ public class ModelService {
 			Optional<Model> temp = modelRepository.findById(id);
 			if (temp.isPresent()) {
 				model = temp.get();
-				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_MODEL_ID, id.toString(), model, 12000l);
+				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_MODEL_ID, id.toString(), model, 12);
 			}
 		}
 		return model;

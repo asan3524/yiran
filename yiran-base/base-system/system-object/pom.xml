@@ -10,7 +10,6 @@
 		<groupId>com.yiran.base</groupId>
 		<artifactId>base-system</artifactId>
 		<version>${yiran.system.version}</version>
-		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>system-object</name>

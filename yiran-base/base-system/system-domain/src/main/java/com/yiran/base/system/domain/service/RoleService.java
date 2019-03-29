@@ -64,7 +64,7 @@ public class RoleService {
 			Optional<Role> temp = roleRepository.findById(id);
 			if (temp.isPresent()) {
 				role = temp.get();
-				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, id.toString(), role, 12000l);
+				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, id.toString(), role, 12);
 			}
 		}
 		return role;

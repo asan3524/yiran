@@ -1,4 +1,7 @@
-package com.yiran.base.security.config;
+package com.yiran.base.security;
+
+import java.util.Collection;
+import java.util.Iterator;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,11 +12,8 @@ import org.springframework.security.authentication.InsufficientAuthenticationExc
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
 
-import java.util.Collection;
-import java.util.Iterator;
-
-public class CustomAccessDecisionManager implements AccessDecisionManager {
-	private static final Logger logger = LoggerFactory.getLogger(CustomAccessDecisionManager.class);
+public class YiranAccessDecisionManager implements AccessDecisionManager {
+	private static final Logger logger = LoggerFactory.getLogger(YiranAccessDecisionManager.class);
 
 	@Override
 	public void decide(Authentication authentication, Object object, Collection<ConfigAttribute> configAttributes)

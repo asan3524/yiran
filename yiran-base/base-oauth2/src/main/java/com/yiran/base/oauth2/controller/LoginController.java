@@ -25,10 +25,16 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.google.gson.Gson;
 import com.yiran.base.core.image.ImageCode;
+import com.yiran.base.system.client.user.UserFuture;
+import com.yiran.base.system.object.UserQo;
 
 @Controller
 public class LoginController {
+
+	@Autowired
+	private UserFuture userFuture;
 
 	@Autowired
 	private DiscoveryClient discoveryClient;
@@ -46,27 +52,11 @@ public class LoginController {
 
 	@RequestMapping("/")
 	public CompletableFuture<String> index(ModelMap model, Principal user) throws Exception {
-		// return userFuture.findByName(user.getName()).thenApply(json ->{
-		// UserQo userQo = new Gson().fromJson(json, UserQo.class);
-		// //分类列表（顶级菜单）
-		// List<KindQo> kindList = new ArrayList<>();
-		// List<Long> kindIds = new ArrayList<>();
-		// for(RoleQo roleQo : userQo.getRoles()){
-		// for(ResourceQo resourceVo : roleQo.getResources()){
-		// //去重，获取分类列表
-		// Long kindId = resourceVo.getModel().getKind().getId();
-		// if(! kindIds.contains(kindId)){
-		// kindList.add(resourceVo.getModel().getKind());
-		// kindIds.add(kindId);
-		// }
-		// }
-		// }
-		//
-		// model.addAttribute("kinds", kindList);
-		// model.addAttribute("user", user);
-		// return "home";
-		// });
-		return null;
+		return userFuture.findByName(user.getName()).thenApply(json -> {
+			UserQo userQo = new Gson().fromJson(json, UserQo.class);
+			model.addAttribute("user", user);
+			return "home";
+		});
 	}
 
 	@RequestMapping(value = "/images/imagecode")

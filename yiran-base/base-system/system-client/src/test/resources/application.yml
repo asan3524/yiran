@@ -1,0 +1,14 @@
+server:
+  port: 8000
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:admin@localhost:8761/eureka/
+spring:
+  application:
+    name: yiran-system-client
+logging:
+  level:
+    root: INFO
+    org.hibernate: INFO
+    

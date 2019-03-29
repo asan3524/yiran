@@ -1,12 +1,12 @@
 server:
   port: 8887
-  
+           
 spring:
   application:
     name: yiran-base-oauth2
   profiles:
     active: develop
-
+    
 ---
 spring:
   profiles: develop

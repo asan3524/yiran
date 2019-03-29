@@ -43,7 +43,7 @@ public class ResourceService {
 		// 保存缓存
 		if (CommonUtils.isNotNull(resource.getId())) {
 			String key = resource.getId().toString();
-			cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, key, resource, 12000l);// 增加缓存，保存12秒
+			cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, key, resource, 12);// 增加缓存，保存12秒
 		}
 	}
 
@@ -64,7 +64,7 @@ public class ResourceService {
 			Optional<Resource> temp = resourceRepository.findById(id);
 			if (temp.isPresent()) {
 				resource = temp.get();
-				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, id.toString(), resource, 12000l);
+				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, id.toString(), resource, 12);
 			}
 		}
 		return resource;

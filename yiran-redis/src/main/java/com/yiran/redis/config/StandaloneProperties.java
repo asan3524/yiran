@@ -4,7 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 
-@Configuration
+@Configuration("redisProperties")
 @ConditionalOnProperty(name = "spring.redis.host")
 public class StandaloneProperties {
 

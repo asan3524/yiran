@@ -10,7 +10,6 @@
 		<groupId>com.yiran.base</groupId>
 		<artifactId>yiran-base</artifactId>
 		<version>1.0.0</version>
-		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<name>base-zipkin</name>

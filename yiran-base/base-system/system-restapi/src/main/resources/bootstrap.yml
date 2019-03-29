@@ -6,3 +6,33 @@ spring:
     name: yiran-system-restapi
   profiles:
     active: develop
+    
+---
+spring:
+  profiles: develop
+  cloud:
+    config:
+      uri: 
+        - http://127.0.0.1:8888
+      profile: develop
+      label: master
+  rabbitmq:
+    host: 127.0.0.1
+    port: 5672
+    username: guest
+    password: guest
+
+---
+spring:
+  profiles: production
+  cloud:
+    config:
+      uri: 
+        - http://yiran-base-config.base.svc.cluster.local:8888
+      profile: production
+      label: master  
+  rabbitmq:
+    host: rabbitmq.base.svc.cluster.local
+    port: 5672
+    username: guest
+    password: guest

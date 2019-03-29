@@ -1,19 +1,17 @@
-#spring:
-#  cloud:
-#    bus:
-#      ack:
-#        destination-service: ${spring.application.name}
+spring:
+  cloud:
+    bus:
+      ack:
+        destination-service: ${spring.application.name}
         
 # 单机模式配置
-#---
+---
 spring:
-#  profiles: develop
+  profiles: develop
 
   redis:
     host: 192.168.40.161
     port: 30379
-    cluster:
-      max-redirects: 
 #    cluster:
 #      nodes:
 #        - 192.168.40.161:30379
@@ -41,14 +39,14 @@ spring:
         url-pattern: '/*'
         exclusions: '*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*'
         
-#eureka:
-#  instance:
-#    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
-#    prefer-ip-address: true  
-#  client:
-#    service-url:
-#      defaultZone: http://admin:admin@127.0.0.1:8761/eureka/
-#   
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true  
+  client:
+    service-url:
+      defaultZone: http://admin:admin@127.0.0.1:8761/eureka/
+   
 #security:
 #  oauth2:
 #    resource:
@@ -63,49 +61,53 @@ logging:
     org.hibernate: INFO
 
 # 集群模式配置
-#---
-#spring:
-#  profiles: production
+---
+spring:
+  profiles: production
 
-#  jpa:
-#    database: mysql
-#    generate-ddl: false
-#    show-sql: true
-#    hibernate:
-#      ddl-auto: none
-#  datasource:
-#    type: com.alibaba.druid.pool.DruidDataSource
-#    url: jdbc:mysql://114.67.224.99:3306/microservice?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&useSSL=false&autoReconnect=true&failOverReadOnly=false&allowMultiQueries=true
-#    username: microservice
-#    password: bitlife_microservice_888T3!
-#    druid:
-#      stat-view-servlet:
-#        enabled: true
-#        #通过子网掩码设置IP段
-#        allow: 127.0.0.1,192.168.40.0/24
-#        deny: 192.168.40.20/32
-#        login-username: druid
-#        login-password: 123456
-#      web-stat-filter:
-#        enabled: true
-#        url-pattern: '/*'
-#        exclusions: '*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*'
-#        
-#eureka:
-#  instance:
-#    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
-#    prefer-ip-address: true  
-#  client:
-#    service-url:
-#      defaultZone: http://admin:admin@yiran-base-eureka-s1.base.svc.cluster.local:8761/eureka/, http://admin:admin@yiran-base-eureka-s2.base.svc.cluster.local:8761/eureka/
-#
+  redis:
+    host: 192.168.40.161
+    port: 30379
+    
+  jpa:
+    database: mysql
+    generate-ddl: false
+    show-sql: true
+    hibernate:
+      ddl-auto: none
+  datasource:
+    type: com.alibaba.druid.pool.DruidDataSource
+    url: jdbc:mysql://114.67.224.99:3306/microservice?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=UTF8&useSSL=false&autoReconnect=true&failOverReadOnly=false&allowMultiQueries=true
+    username: microservice
+    password: bitlife_microservice_888T3!
+    druid:
+      stat-view-servlet:
+        enabled: true
+        #通过子网掩码设置IP段
+        allow: 127.0.0.1,192.168.40.0/24
+        deny: 192.168.40.20/32
+        login-username: druid
+        login-password: 123456
+      web-stat-filter:
+        enabled: true
+        url-pattern: '/*'
+        exclusions: '*.js,*.gif,*.jpg,*.bmp,*.png,*.css,*.ico,/druid/*'
+        
+eureka:
+  instance:
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true  
+  client:
+    service-url:
+      defaultZone: http://admin:admin@yiran-base-eureka-s1.base.svc.cluster.local:8761/eureka/, http://admin:admin@yiran-base-eureka-s2.base.svc.cluster.local:8761/eureka/
+
 #security:
 #  oauth2:
 #    resource:
 #      user-info-uri: http://yiran-base-oauth2.base.svc.cluster.local:8887/user/
-#
-#logging:
-#  level:
-#    org.springframework.web: INFO
-#    root: INFO
-#    org.hibernate: INFO
+
+logging:
+  level:
+    org.springframework.web: INFO
+    root: INFO
+    org.hibernate: INFO

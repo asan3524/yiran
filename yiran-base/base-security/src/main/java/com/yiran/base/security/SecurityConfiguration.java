@@ -1,4 +1,4 @@
-package com.yiran.base.security.config;
+package com.yiran.base.security;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -13,7 +13,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.security.oauth2.client.EnableOAuth2Sso;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -25,53 +24,51 @@ import org.springframework.security.web.csrf.CsrfTokenRepository;
 import org.springframework.security.web.csrf.HttpSessionCsrfTokenRepository;
 import org.springframework.web.filter.OncePerRequestFilter;
 
-import com.yiran.redis.cache.RedisCacheComponent;
-
 @Configuration
 @EnableOAuth2Sso
-@EnableConfigurationProperties(SecuritySettings.class)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
-	@Autowired
-	private AuthenticationManager authenticationManager;
+
 	@Autowired
 	private SecuritySettings settings;
 
-	@Autowired
-	private RedisCacheComponent cacheComponent;
-
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		http.antMatcher("/**").authorizeRequests().antMatchers(settings.getPermitall().split(",")).permitAll()
-				.anyRequest().authenticated().and().csrf().requireCsrfProtectionMatcher(csrfSecurityRequestMatcher())
+		http.antMatcher("/**").authorizeRequests().antMatchers(settings.getMatchers()).permitAll().anyRequest()
+				.authenticated().and().csrf().requireCsrfProtectionMatcher(csrfSecurityRequestMatcher())
 				.csrfTokenRepository(csrfTokenRepository()).and().addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
-				.logout().logoutUrl("/logout").permitAll().logoutSuccessUrl(settings.getLogoutsuccssurl()).and()
-				.exceptionHandling().accessDeniedPage(settings.getDeniedpage());
+				.logout().and().exceptionHandling().accessDeniedPage(settings.getDeniedurl());
 	}
 
 	@Bean
-	public CustomFilterSecurityInterceptor customFilter() throws Exception {
-		CustomFilterSecurityInterceptor customFilter = new CustomFilterSecurityInterceptor();
+	public YiranFilterSecurityInterceptor customFilter() throws Exception {
+		YiranFilterSecurityInterceptor customFilter = new YiranFilterSecurityInterceptor();
 		customFilter.setSecurityMetadataSource(securityMetadataSource());
 		customFilter.setAccessDecisionManager(accessDecisionManager());
-		customFilter.setAuthenticationManager(authenticationManager);
+		customFilter.setAuthenticationManager(authenticationManagerBean());
 		return customFilter;
 	}
 
 	@Bean
-	public CustomAccessDecisionManager accessDecisionManager() {
-		return new CustomAccessDecisionManager();
+	public YiranAccessDecisionManager accessDecisionManager() {
+		return new YiranAccessDecisionManager();
 	}
 
 	@Bean
-	public CustomSecurityMetadataSource securityMetadataSource() {
-		return new CustomSecurityMetadataSource(cacheComponent);
+	public YiranSecurityMetadataSource securityMetadataSource() {
+		return new YiranSecurityMetadataSource();
 	}
 
+	@Override
+	@Bean
+	public AuthenticationManager authenticationManagerBean() throws Exception {
+		return super.authenticationManagerBean();
+	}
+	
 	// 开放接口禁止防跨站伪造攻击
 	private CsrfSecurityRequestMatcher csrfSecurityRequestMatcher() {
 		CsrfSecurityRequestMatcher csrfSecurityRequestMatcher = new CsrfSecurityRequestMatcher();
 		List<String> list = new ArrayList<String>();
-		list.add("/openhttp/");// 完全开放
+
 		csrfSecurityRequestMatcher.setExecludeUrls(list);
 		return csrfSecurityRequestMatcher;
 	}

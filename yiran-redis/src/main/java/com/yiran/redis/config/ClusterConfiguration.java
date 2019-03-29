@@ -26,18 +26,18 @@ public class ClusterConfiguration {
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
 
 	@Resource
-	private ClusterProperties clusterProperties;
+	private ClusterProperties redisProperties;
 
 	private RedisClusterConfiguration clusterConfiguration() {
 		Map<String, Object> source = new HashMap<String, Object>();
-		source.put("spring.redis.cluster.nodes", clusterProperties.getClusterNodes());
-		source.put("spring.redis.cluster.timeout", clusterProperties.getTimeout());
-		source.put("spring.redis.cluster.max-redirects", clusterProperties.getRedirects());
+		source.put("spring.redis.cluster.nodes", redisProperties.getClusterNodes());
+		source.put("spring.redis.cluster.timeout", redisProperties.getTimeout());
+		source.put("spring.redis.cluster.max-redirects", redisProperties.getRedirects());
 		return new RedisClusterConfiguration(new MapPropertySource("ClusterConfiguration", source));
 	}
 
 	private JedisConnectionFactory connectionFactory() {
-		logger.info("redis create connectionFactory load {}", clusterProperties.toString());
+		logger.info("redis create connectionFactory load {}", redisProperties.toString());
 		return new JedisConnectionFactory(clusterConfiguration());
 	}
 

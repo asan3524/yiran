@@ -11,13 +11,13 @@
 		<groupId>com.yiran.base</groupId>
 		<artifactId>yiran-base</artifactId>
 		<version>1.0.0</version>
-		<relativePath>../pom.xml</relativePath>
 	</parent>
 
 	<modules>
 		<module>system-object</module>
 		<module>system-domain</module>
 		<module>system-restapi</module>
+		<module>system-client</module>
 	</modules>
 
 	<name>base-system</name>

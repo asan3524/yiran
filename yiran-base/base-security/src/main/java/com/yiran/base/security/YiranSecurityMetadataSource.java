@@ -1,4 +1,4 @@
-package com.yiran.base.security.config;
+package com.yiran.base.security;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -6,51 +6,44 @@ import java.util.List;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.ConfigAttribute;
 import org.springframework.security.access.SecurityConfig;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
+import org.springframework.stereotype.Component;
 import org.springframework.util.AntPathMatcher;
 import org.springframework.util.PathMatcher;
 
-import com.yiran.base.core.util.CommonUtils;
+import com.google.common.reflect.TypeToken;
+import com.google.gson.Gson;
+import com.yiran.base.system.client.role.RoleFuture;
 import com.yiran.base.system.object.ResourceQo;
 import com.yiran.base.system.object.RoleQo;
-import com.yiran.redis.cache.RedisCacheComponent;
 
-public class CustomSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
+@Component
+public class YiranSecurityMetadataSource implements FilterInvocationSecurityMetadataSource {
 
-	private static final Logger logger = LoggerFactory.getLogger(CustomSecurityMetadataSource.class);
-	public static final String YIRAN_SYSTEM_CENTER_ROLES_ALL_ = "YIRAN_SYSTEM_CENTER_ROLES_ALL_";
+	private static final Logger logger = LoggerFactory.getLogger(YiranSecurityMetadataSource.class);
+
+	@Autowired
+	private RoleFuture roleFuture;
+
 	private PathMatcher pathMatcher = new AntPathMatcher();
-
-	private RedisCacheComponent cacheComponent;
 
 	@Override
 	public Collection<ConfigAttribute> getAllConfigAttributes() {
 		return null;
 	}
 
-	public CustomSecurityMetadataSource(RedisCacheComponent cacheComponent) {
-		super();
-		this.cacheComponent = cacheComponent;
-	}
-
-	@SuppressWarnings("unchecked")
 	@Override
 	public Collection<ConfigAttribute> getAttributes(Object object) throws IllegalArgumentException {
 		String url = ((FilterInvocation) object).getRequestUrl();
 
-		// 先从缓存中取角色列表
-		Object objects = cacheComponent.get(YIRAN_SYSTEM_CENTER_ROLES_ALL_, "LIST");
-		List<RoleQo> roleQoList = null;
-		if (CommonUtils.isNull(objects)) {
-			logger.info("从缓存中获取角色列表为空，请检查redis或者刷新缓存");
-		} else {
-			roleQoList = (List<RoleQo>) objects;
-		}
+		List<RoleQo> roleQoList = loadRoles();
 
-		Collection<ConfigAttribute> roles = new ArrayList<>();// 有权限的角色列表
+		// 有权限的角色列表
+		Collection<ConfigAttribute> roles = new ArrayList<>();
 
 		// 检查每个角色的资源，如果跟请求资源匹配，则加入角色列表。为后面权限检查提供依据
 		if (roleQoList != null && roleQoList.size() > 0) {
@@ -74,4 +67,13 @@ public class CustomSecurityMetadataSource implements FilterInvocationSecurityMet
 	public boolean supports(Class<?> clazz) {
 		return true;
 	}
+
+	private List<RoleQo> loadRoles() {
+		String json = roleFuture.findList().join();
+		@SuppressWarnings("serial")
+		List<RoleQo> list = new Gson().fromJson(json, new TypeToken<List<RoleQo>>() {
+		}.getType());
+		return list;
+	}
+
 }

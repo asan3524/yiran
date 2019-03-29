@@ -1,4 +1,4 @@
-package com.yiran.base.security.config;
+package com.yiran.base.security;
 
 import java.io.IOException;
 
@@ -17,9 +17,9 @@ import org.springframework.security.access.intercept.InterceptorStatusToken;
 import org.springframework.security.web.FilterInvocation;
 import org.springframework.security.web.access.intercept.FilterInvocationSecurityMetadataSource;
 
-public class CustomFilterSecurityInterceptor extends AbstractSecurityInterceptor implements Filter {
+public class YiranFilterSecurityInterceptor extends AbstractSecurityInterceptor implements Filter {
 
-	private static final Logger logger = LoggerFactory.getLogger(CustomFilterSecurityInterceptor.class);
+	private static final Logger logger = LoggerFactory.getLogger(YiranFilterSecurityInterceptor.class);
 
 	private FilterInvocationSecurityMetadataSource securityMetadataSource;
 

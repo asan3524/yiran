@@ -43,7 +43,7 @@ public class UserService {
 		// 保存缓存
 		if (CommonUtils.isNotNull(user.getId())) {
 			String key = user.getId().toString();
-			cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, key, user, 12000l);// 增加缓存，保存12秒
+			cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, key, user, 12);// 增加缓存，保存12秒
 		}
 	}
 
@@ -63,7 +63,7 @@ public class UserService {
 			Optional<User> temp = userRepository.findById(id);
 			if (temp.isPresent()) {
 				user = temp.get();
-				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id.toString(), user, 12000l);
+				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id.toString(), user, 12);
 			}
 		}
 		return user;

@@ -6,7 +6,7 @@ spring:
     name: yiran-demo-provider
   profiles:
     active: develop
-
+    
 ---
 spring:
   profiles: develop
