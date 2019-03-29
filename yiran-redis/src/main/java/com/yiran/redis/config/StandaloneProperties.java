@@ -4,6 +4,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.context.annotation.Configuration;
 
+/**
+ * @author lishibang 
+ * 名称必须为redisProperties，以便外部使用@ConditionalOnResource(resources
+ *         = "redisProperties")验证redis是否加载
+ */
 @Configuration("redisProperties")
 @ConditionalOnProperty(name = "spring.redis.host")
 public class StandaloneProperties {
