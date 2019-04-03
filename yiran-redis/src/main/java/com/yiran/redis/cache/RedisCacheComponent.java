@@ -11,8 +11,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import com.alibaba.fastjson.JSON;
-import com.alibaba.fastjson.JSONException;
+import com.google.gson.GsonBuilder;
 import com.yiran.redis.exception.RedisException;
 import com.yiran.redis.support.DistributedCacheSupport;
 
@@ -92,29 +91,38 @@ public class RedisCacheComponent<T> implements DistributedCacheSupport<T> {
 	@Override
 	public long delete(Collection<String> key) {
 		// TODO Auto-generated method stub
-		return redisTemplate.delete(key);
+		Long result = redisTemplate.delete(key);
+		return null == result ? 0 : result;
 	}
 
 	@Override
-	public boolean hashDelete(String key, Object... hashKey) {
+	public long hashDelete(String key, Object... hashKey) {
 		// TODO Auto-generated method stub
 		if (redisTemplate.hasKey(key)) {
 			BoundHashOperations<String, String, String> boundHashOperations = redisTemplate.boundHashOps(key);
-			return boundHashOperations.delete(hashKey) > 0;
+			Long result = boundHashOperations.delete(hashKey);
+			return null == result ? 0 : result;
 		} else {
-			return false;
+			return 0;
 		}
 	}
+
+	// private T jsonToObj(final String value, Class<T> clazz) {
+	// if (value == null) {
+	// return null;
+	// }
+	// try {
+	// return JSON.parseObject(value, clazz);
+	// } catch (JSONException e) {
+	// return null;
+	// }
+	// }
 
 	private T jsonToObj(final String value, Class<T> clazz) {
 		if (value == null) {
 			return null;
 		}
-		try {
-			return JSON.parseObject(value, clazz);
-		} catch (JSONException e) {
-			return null;
-		}
+		return new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().fromJson(value, clazz);
 	}
 
 	private String objToJson(final String key, final T value) {
@@ -122,17 +130,29 @@ public class RedisCacheComponent<T> implements DistributedCacheSupport<T> {
 		if (value == null) {
 			throw new RedisException("value is null!");
 		}
-		String stringValue = null;
-		try {
-			stringValue = JSON.toJSONString(value, true);
-		} catch (JSONException e) {
-			throw new RedisException("value toJSONString exception!");
-		}
+		String stringValue = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(value);
 		if (StringUtils.isEmpty(stringValue)) {
 			throw new RedisException("value to json is null!");
 		}
 		return stringValue;
 	}
+
+	// private String objToJson(final String key, final T value) {
+	// checkRedisKey(key);
+	// if (value == null) {
+	// throw new RedisException("value is null!");
+	// }
+	// String stringValue = null;
+	// try {
+	// stringValue = JSON.toJSONString(value, true);
+	// } catch (JSONException e) {
+	// throw new RedisException("value toJSONString exception!");
+	// }
+	// if (StringUtils.isEmpty(stringValue)) {
+	// throw new RedisException("value to json is null!");
+	// }
+	// return stringValue;
+	// }
 
 	private void checkRedisKey(final String key) {
 		if (StringUtils.isEmpty(key)) {

@@ -14,11 +14,7 @@ import org.springframework.core.env.MapPropertySource;
 import org.springframework.data.redis.connection.RedisClusterConfiguration;
 import org.springframework.data.redis.connection.jedis.JedisConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.serializer.Jackson2JsonRedisSerializer;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
-
-import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.databind.ObjectMapper;
 
 @Configuration
 @ConditionalOnProperty(name = "spring.redis.cluster.nodes")
@@ -41,22 +37,12 @@ public class ClusterConfiguration {
 		return new JedisConnectionFactory(clusterConfiguration());
 	}
 
-	private Jackson2JsonRedisSerializer<String> jackson2JsonRedisSerializer() {
-		ObjectMapper objectMapper = new ObjectMapper();
-		objectMapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
-		Jackson2JsonRedisSerializer<String> jackson2JsonRedisSerializer = new Jackson2JsonRedisSerializer<String>(
-				String.class);
-		return jackson2JsonRedisSerializer;
-	}
-
 	@Bean(name = "redisTemplate")
 	public RedisTemplate<String, String> redisTemplate() {
 		RedisTemplate<String, String> redisTemplate = new RedisTemplate<String, String>();
 		redisTemplate.setConnectionFactory(connectionFactory());
-		redisTemplate.setDefaultSerializer(jackson2JsonRedisSerializer());
 		StringRedisSerializer stringRedisSerializer = new StringRedisSerializer();
-		redisTemplate.setKeySerializer(stringRedisSerializer);
-		redisTemplate.setHashKeySerializer(stringRedisSerializer);
+		redisTemplate.setDefaultSerializer(stringRedisSerializer);
 		redisTemplate.setEnableTransactionSupport(true);
 		return redisTemplate;
 	}

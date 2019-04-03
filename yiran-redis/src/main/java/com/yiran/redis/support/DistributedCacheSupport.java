@@ -25,5 +25,5 @@ public interface DistributedCacheSupport<T> {
 	
 	long delete(Collection<String> key);
 	
-	boolean hashDelete(String key, Object... hashKey);
+	long hashDelete(String key, Object... hashKey);
 }

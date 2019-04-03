@@ -29,14 +29,13 @@
 			<artifactId>jedis</artifactId>
 		</dependency>
 		<dependency>
+			<groupId>com.google.code.gson</groupId>
+			<artifactId>gson</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>org.redisson</groupId>
 			<artifactId>redisson</artifactId>
 			<version>3.9.1</version>
-		</dependency>
-		<dependency>
-			<groupId>com.alibaba</groupId>
-			<artifactId>fastjson</artifactId>
-			<version>1.2.54</version>
 		</dependency>
 	</dependencies>
 </project>
