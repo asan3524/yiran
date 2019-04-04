@@ -3,16 +3,14 @@ target/
 *.project
 *.classpath
 *.springBeans
+*/.settings/
+*/.project
+*/.classpath
+*/.springBeans
 
 ### STS ###
 /*/.apt_generated
 /*/.factorypath
-/*/.project
-/*/.classpath
-/*/.springBeans
-/*/target
-/*/.setting
-/*/.setting/
 
 ### IntelliJ IDEA ###
 /*/.idea
