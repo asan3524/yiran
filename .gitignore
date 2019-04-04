@@ -7,12 +7,12 @@ target/
 ### STS ###
 /*/.apt_generated
 /*/.factorypath
-*/.project
-*/.classpath
-*/.springBeans
-*/target
-*/.setting
-*/.setting/
+/*/.project
+/*/.classpath
+/*/.springBeans
+/*/target
+/*/.setting
+/*/.setting/
 
 ### IntelliJ IDEA ###
 /*/.idea
