@@ -1,13 +1,18 @@
 target/
 !/*/.mvn/wrapper/maven-wrapper.jar
-/*/.project
-/*/.classpath
+*.project
+*.classpath
+*.springBeans
 
 ### STS ###
 /*/.apt_generated
 /*/.factorypath
-/*/.springBeans
-/*/target
+*/.project
+*/.classpath
+*/.springBeans
+*/target
+*/.setting
+*/.setting/
 
 ### IntelliJ IDEA ###
 /*/.idea
