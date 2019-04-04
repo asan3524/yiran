@@ -3,10 +3,7 @@ target/
 *.project
 *.classpath
 *.springBeans
-*/.settings/
-*/.project
-*/.classpath
-*/.springBeans
+*.settings/
 
 ### STS ###
 /*/.apt_generated
