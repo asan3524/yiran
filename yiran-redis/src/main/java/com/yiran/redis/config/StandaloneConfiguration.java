@@ -2,6 +2,9 @@ package com.yiran.redis.config;
 
 import javax.annotation.Resource;
 
+import org.redisson.Redisson;
+import org.redisson.api.RedissonClient;
+import org.redisson.config.Config;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
@@ -44,5 +47,13 @@ public class StandaloneConfiguration {
 		redisTemplate.setDefaultSerializer(stringRedisSerializer);
 		redisTemplate.setEnableTransactionSupport(true);
 		return redisTemplate;
+	}
+
+	@Bean(name = "redissonClient")
+	public RedissonClient redissonClient() {
+		Config config = new Config();
+		config.useSingleServer()
+				.setAddress("redis://" + standaloneProperties.getHost() + ":" + standaloneProperties.getPort());
+		return Redisson.create(config);
 	}
 }

@@ -3,8 +3,7 @@ package com.yiran.redis.cache;
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
 
-import javax.annotation.Resource;
-
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.BoundHashOperations;
 import org.springframework.data.redis.core.BoundValueOperations;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -18,7 +17,7 @@ import com.yiran.redis.support.DistributedCacheSupport;
 @Component
 public class RedisCacheComponent<T> implements DistributedCacheSupport<T> {
 
-	@Resource(name = "redisTemplate")
+	@Autowired
 	private RedisTemplate<String, String> redisTemplate;
 
 	@Override

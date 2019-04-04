@@ -4,11 +4,13 @@ import java.util.concurrent.TimeUnit;
 
 public interface DistributedLockSupport {
 
-	boolean isLocked(String key);
+	void lock(String lockName);
+	
+	void lock(String lockName, long timeout, TimeUnit unit);
+	
+	void unlock(String lockName);
+	
+	boolean tryLock(String lockName);
 
-	boolean tryLock(String key);
-
-	boolean tryLock(String key, long timeout, TimeUnit unit);
-
-	void lock(String key);
+	boolean tryLock(String lockName, long timeout, TimeUnit unit);
 }
