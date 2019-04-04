@@ -6,11 +6,12 @@ spring:
     config:
       server:
         git:
-          uri: https://github.com/asan3524/yiran-base-config
+#          uri: https://github.com/asan3524/yiran-base-config
+          uri: http://192.168.40.160/lsb/yiran-base-config.git
           username: 
           password: 
           clone-on-start: true
-    # 通过端点 /bus/refresh 刷新配置(基于bus)
+    # 通过端点 /bus-refresh 刷新配置(基于bus)
     bus:
       trace:
         enabled: true

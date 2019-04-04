@@ -39,7 +39,7 @@ public class SecurityConfigurer extends AuthorizationServerConfigurerAdapter {
 	@Value("${security.oauth2.client.scope:webclient,mobileclient}")
 	private String[] scopes;
 
-	@Value("${security.oauth2.client.authorized-grant-types:refresh_token,password,client_credentials}")
+	@Value("${security.oauth2.client.authorized-grant-types:authorization_code,refresh_token,password,client_credentials}")
 	private String[] grant_types;
 
 	@Override

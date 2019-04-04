@@ -17,6 +17,7 @@
 		<yiran.redis.version>0.0.1-SNAPSHOT</yiran.redis.version>
 		<yiran.core.version>0.0.1-SNAPSHOT</yiran.core.version>
 		<yiran.security.version>0.0.1-SNAPSHOT</yiran.security.version>
+		<yiran.soo.version>0.0.1-SNAPSHOT</yiran.soo.version>
 		<yiran.system.version>0.0.1-SNAPSHOT</yiran.system.version>
 	</properties>
 	
