@@ -10,12 +10,17 @@ spring:
   profiles: develop
 
   redis:
-    host: 192.168.40.161
-    port: 30379
+    redisson: false
+    host: 114.67.224.99
+    port: 6379
+#  redis:
+#    host: 192.168.40.161
+#    port: 30379
 #    cluster:
 #      nodes:
 #        - 192.168.40.161:30379
   jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
     database: mysql
     generate-ddl: false
     show-sql: true
@@ -47,13 +52,27 @@ eureka:
     service-url:
       defaultZone: http://admin:admin@127.0.0.1:8761/eureka/
    
-#security:
-#  oauth2:
-#    resource:
-#      user-info-uri: http://127.0.0.1:8887/user/
-#    authorization:
-#      matchers: /swagger-ui.html, /webjars/**, /swagger-resources/**, /v2/api-docs, /static/**
-        
+security:
+  oauth2:
+    authorization:
+      matchers: /user/names/**, /role/list, /actuator/**, /swagger-ui.html, /webjars/**, /swagger-resources/**, /v2/api-docs, /static/**
+    client:
+      scope: webclient
+      clientId: eagleeye
+      clientSecret: thisissecret
+      accessTokenUri: http://127.0.0.1:8887/oauth/token
+      userAuthorizationUri: http://127.0.0.1:8887/oauth/authorize
+      pre-established-redirect-uri: http://127.0.0.1:8887/login
+    resource:
+      jwt:
+        key-uri: http://127.0.0.1:8887/oauth/token_key
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream, health, info
+                
 logging:
   level:
     org.springframework.web: INFO
@@ -101,11 +120,27 @@ eureka:
     service-url:
       defaultZone: http://admin:admin@yiran-base-eureka-s1.base.svc.cluster.local:8761/eureka/, http://admin:admin@yiran-base-eureka-s2.base.svc.cluster.local:8761/eureka/
 
-#security:
-#  oauth2:
-#    resource:
-#      user-info-uri: http://yiran-base-oauth2.base.svc.cluster.local:8887/user/
+security:
+  oauth2:
+    authorization:
+      matchers: /user/names/**, /role/list, /actuator/**
+    client:
+      scope: webclient
+      clientId: eagleeye
+      clientSecret: thisissecret
+      accessTokenUri: http://yiran-base-oauth2.base.svc.cluster.local:8887/oauth/token
+      userAuthorizationUri: http://yiran-base-oauth2.base.svc.cluster.local:8887/oauth/authorize
+      pre-established-redirect-uri: http://yiran-base-oauth2.base.svc.cluster.local:8887/login
+    resource:
+      jwt:
+        key-uri: http://yiran-base-oauth2.base.svc.cluster.local:8887/oauth/token_key 
 
+management:
+  endpoints:
+    web:
+      exposure:
+        include: hystrix.stream, health, info
+        
 logging:
   level:
     org.springframework.web: INFO

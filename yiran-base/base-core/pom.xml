@@ -6,7 +6,7 @@
 
 	<artifactId>base-core</artifactId>
 	<version>${yiran.core.version}</version>
-	
+
 	<parent>
 		<groupId>com.yiran.base</groupId>
 		<artifactId>yiran-base</artifactId>
@@ -15,10 +15,13 @@
 
 	<name>base-core</name>
 	<description>base-core</description>
-	
+
 	<dependencies>
-		
-        <dependency>
+		<dependency>
+			<groupId>org.springframework.data</groupId>
+			<artifactId>spring-data-commons</artifactId>
+		</dependency>
+		<dependency>
 			<groupId>com.google.code.gson</groupId>
 			<artifactId>gson</artifactId>
 		</dependency>

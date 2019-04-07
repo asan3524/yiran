@@ -58,5 +58,4 @@ public class CopyUtil {
 		}
 		return destlist;
 	}
-
 }

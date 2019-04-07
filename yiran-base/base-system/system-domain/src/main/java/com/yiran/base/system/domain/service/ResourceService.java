@@ -11,18 +11,22 @@ import javax.persistence.criteria.Root;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import com.yiran.base.core.code.Code;
+import com.yiran.base.core.data.BaseRespData;
+import com.yiran.base.core.data.PageRequestData;
+import com.yiran.base.core.data.PageResponseData;
+import com.yiran.base.core.data.RespData;
 import com.yiran.base.core.util.CommonUtils;
-import com.yiran.base.system.domain.constant.Constant;
+import com.yiran.base.core.util.CopyUtil;
+import com.yiran.base.system.constant.Constant;
 import com.yiran.base.system.domain.dao.ResourceRepository;
-import com.yiran.base.system.domain.entity.Resource;
-import com.yiran.base.system.object.ResourceQo;
+import com.yiran.base.system.domain.entity.ResourceInfo;
+import com.yiran.base.system.object.Resource;
+import com.yiran.base.system.qo.ResourceQo;
 import com.yiran.redis.cache.RedisCacheComponent;
 
 @Service
@@ -31,71 +35,137 @@ public class ResourceService {
 	@Autowired
 	private ResourceRepository resourceRepository;
 	@Autowired
-	private RedisCacheComponent<Resource> cacheComponent;
+	private RedisCacheComponent<Resource> resourceCacheComponent;
 
-	public void save(Resource resource) {
-		// 删除缓存
-		if (CommonUtils.isNotNull(resource.getId())) {
-			String key = resource.getId().toString();
-			cacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, key);// 删除原有缓存
+	public BaseRespData save(Resource resource) {
+
+		BaseRespData brd = new BaseRespData();
+
+		resource.setId(null);
+		ResourceInfo resourceInfo = CopyUtil.copy(resource, ResourceInfo.class);
+
+		resourceRepository.save(resourceInfo);
+		// 保存成功后缓存
+		if (CommonUtils.isNotNull(resourceInfo.getId())) {
+
+			Resource resourceChache = CopyUtil.copy(resourceInfo, Resource.class);
+
+			resourceCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID,
+					resourceChache.getId().toString(), resourceChache);
 		}
-		resourceRepository.save(resource);
-		// 保存缓存
-		if (CommonUtils.isNotNull(resource.getId())) {
-			String key = resource.getId().toString();
-			cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, key, resource, 12);// 增加缓存，保存12秒
+
+		brd.setCode(Code.SC_OK);
+		return brd;
+	}
+
+	public BaseRespData delete(Long id) {
+
+		BaseRespData brd = new BaseRespData();
+
+		ResourceInfo resourceInfo = resourceRepository.getOne(id);
+		if (CommonUtils.isNotNull(resourceInfo)) {
+			// 删除缓存
+			resourceCacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID,
+					resourceInfo.getId().toString());
+
+			resourceRepository.cleanRoleToResource(id);
+
+			resourceRepository.deleteById(id);
+
+			brd.setCode(Code.SC_OK);
+		} else {
+			brd.setCode(Code.SC_BAD_REQUEST);
+			brd.setMessage("resource by id {" + id + "} is not exist");
 		}
+
+		return brd;
 	}
 
-	public void delete(Long id) {
-		// 删除缓存
-		cacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, id.toString());
+	public BaseRespData update(Resource resource) {
+		BaseRespData brd = new BaseRespData();
+		if (CommonUtils.isNull(resource.getId())) {
+			brd.setCode(Code.SC_BAD_REQUEST);
+			brd.setMessage("update resource id can not be null");
+			return brd;
+		}
 
-		resourceRepository.deleteById(id);
+		ResourceInfo resourceInfo = CopyUtil.copy(resource, ResourceInfo.class);
+
+		resourceRepository.save(resourceInfo);
+		// 保存成功后缓存
+		if (CommonUtils.isNotNull(resourceInfo.getId())) {
+
+			Resource resourceChache = CopyUtil.copy(resourceInfo, Resource.class);
+
+			resourceCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID,
+					resourceChache.getId().toString(), resourceChache);
+		}
+
+		brd.setCode(Code.SC_OK);
+		return brd;
 	}
 
-	public List<Resource> findAll() {
-		return resourceRepository.findAll();
-	}
+	public RespData<Resource> get(Long id) {
+		RespData<Resource> rd = new RespData<Resource>();
+		Resource resource = resourceCacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, id.toString(),
+				Resource.class);
 
-	public Resource findOne(Long id) {
-		Resource resource = cacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, id.toString(), Resource.class);
-		if (CommonUtils.isNull(resource)) {
-			Optional<Resource> temp = resourceRepository.findById(id);
+		if (null != resource) {
+			rd.setCode(Code.SC_OK);
+			rd.setData(resource);
+		} else {
+			Optional<ResourceInfo> temp = resourceRepository.findById(id);
 			if (temp.isPresent()) {
-				resource = temp.get();
-				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, id.toString(), resource, 12);
+				resource = CopyUtil.copy(temp.get(), Resource.class);
+				resourceCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID,
+						resource.getId().toString(), resource);
+
+				rd.setCode(Code.SC_OK);
+				rd.setData(resource);
+			} else {
+				rd.setCode(Code.SC_BAD_REQUEST);
+				rd.setMessage("resource by id {" + id + "} is not exist");
 			}
 		}
-		return resource;
+		return rd;
 	}
 
-	public Page<Resource> findAll(ResourceQo resourceQo) {
-		Sort sort = new Sort(Sort.Direction.DESC, "created");
-		Pageable pageable = PageRequest.of(resourceQo.getPage(), resourceQo.getSize(), sort);
+	public PageResponseData<List<Resource>> findAll(PageRequestData<ResourceQo> pageRequest) {
 
-		return resourceRepository.findAll(new Specification<Resource>() {
-			/**
-			 * 
-			 */
+		Page<ResourceInfo> result = resourceRepository.findAll(new Specification<ResourceInfo>() {
 			private static final long serialVersionUID = 1L;
 
 			@Override
-			public Predicate toPredicate(Root<Resource> root, CriteriaQuery<?> query, CriteriaBuilder criteriaBuilder) {
+			public Predicate toPredicate(Root<ResourceInfo> root, CriteriaQuery<?> query,
+					CriteriaBuilder criteriaBuilder) {
 				List<Predicate> predicatesList = new ArrayList<Predicate>();
 
-				if (CommonUtils.isNotNull(resourceQo.getName())) {
-					predicatesList.add(criteriaBuilder.like(root.get("name"), "%" + resourceQo.getName() + "%"));
-				}
-				if (CommonUtils.isNotNull(resourceQo.getCreated())) {
-					predicatesList.add(criteriaBuilder.greaterThan(root.get("created"), resourceQo.getCreated()));
+				if (CommonUtils.isNotNull(pageRequest.getData().getName())) {
+					predicatesList
+							.add(criteriaBuilder.like(root.get("name"), "%" + pageRequest.getData().getName() + "%"));
 				}
 
+				if (CommonUtils.isNotNull(pageRequest.getData().getMethod())) {
+					predicatesList.add(criteriaBuilder.equal(root.get("method"), pageRequest.getData().getMethod()));
+				}
+
+				if (CommonUtils.isNotNull(pageRequest.getData().getUrl())) {
+					predicatesList
+							.add(criteriaBuilder.like(root.get("url"), "%" + pageRequest.getData().getUrl() + "%"));
+				}
 				query.where(predicatesList.toArray(new Predicate[predicatesList.size()]));
 
 				return query.getRestriction();
 			}
-		}, pageable);
-	}
+		}, pageRequest.getPageable());
 
+		PageResponseData<List<Resource>> users = new PageResponseData<List<Resource>>(pageRequest);
+
+		users.setTotal(result.getTotalElements());
+		users.setNumber(result.getNumberOfElements());
+		users.setData(CopyUtil.copyList(result.getContent(), Resource.class));
+
+		users.setCode(Code.SC_OK);
+		return users;
+	}
 }
