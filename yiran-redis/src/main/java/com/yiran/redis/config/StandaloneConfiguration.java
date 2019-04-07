@@ -50,6 +50,7 @@ public class StandaloneConfiguration {
 	}
 
 	@Bean(name = "redissonClient")
+	@ConditionalOnProperty(name = "spring.redis.redisson", havingValue = "true")
 	public RedissonClient redissonClient() {
 		Config config = new Config();
 		config.useSingleServer()

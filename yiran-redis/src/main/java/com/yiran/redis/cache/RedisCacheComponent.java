@@ -1,6 +1,7 @@
 package com.yiran.redis.cache;
 
 import java.util.Collection;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -38,6 +39,12 @@ public class RedisCacheComponent<T> implements DistributedCacheSupport<T> {
 	}
 
 	@Override
+	public boolean exist(String key) {
+		// TODO Auto-generated method stub
+		return redisTemplate.hasKey(key);
+	}
+
+	@Override
 	public void hashPut(String key, String hashKey, T hashValue) {
 		// TODO Auto-generated method stub
 		checkRedisKey(key);
@@ -54,6 +61,33 @@ public class RedisCacheComponent<T> implements DistributedCacheSupport<T> {
 		BoundHashOperations<String, String, String> boundHashOperations = redisTemplate.boundHashOps(key);
 		boundHashOperations.expire(expiry, TimeUnit.SECONDS);
 		boundHashOperations.put(hashKey, v);
+	}
+
+	@Override
+	public void hashPut(String key, Map<String, String> values) {
+		// TODO Auto-generated method stub
+		checkRedisKey(key);
+		BoundHashOperations<String, String, String> boundHashOperations = redisTemplate.boundHashOps(key);
+		boundHashOperations.putAll(values);
+	}
+
+	@Override
+	public void hashPut(String key, Map<String, String> values, Integer expiry) {
+		// TODO Auto-generated method stub
+		checkRedisKey(key);
+		BoundHashOperations<String, String, String> boundHashOperations = redisTemplate.boundHashOps(key);
+		boundHashOperations.expire(expiry, TimeUnit.SECONDS);
+		boundHashOperations.putAll(values);
+	}
+
+	@Override
+	public boolean hashExist(String key, String hashKey) {
+		// TODO Auto-generated method stub
+		if (redisTemplate.hasKey(key)) {
+			BoundHashOperations<String, String, String> boundHashOperations = redisTemplate.boundHashOps(key);
+			return boundHashOperations.hasKey(hashKey);
+		}
+		return false;
 	}
 
 	@Override

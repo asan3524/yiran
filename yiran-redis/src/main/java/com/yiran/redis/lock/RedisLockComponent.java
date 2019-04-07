@@ -7,11 +7,13 @@ import org.redisson.api.RedissonClient;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnProperty;
 import org.springframework.stereotype.Component;
 
 import com.yiran.redis.support.DistributedLockSupport;
 
 @Component
+@ConditionalOnProperty(name = "spring.redis.redisson", havingValue = "true")
 public class RedisLockComponent implements DistributedLockSupport {
 
 	private final Logger logger = LoggerFactory.getLogger(this.getClass());
