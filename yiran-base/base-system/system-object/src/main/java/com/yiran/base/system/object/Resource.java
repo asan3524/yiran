@@ -1,0 +1,70 @@
+package com.yiran.base.system.object;
+
+import java.util.Date;
+
+import org.springframework.format.annotation.DateTimeFormat;
+
+/**
+ * @author lishibang 资源模型
+ */
+public class Resource {
+
+	private Long id;
+	private String name;
+	/**
+	 * GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE;
+	 */
+	private String method;
+	private String url;
+	private String remark;
+	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+	private Date createTime;
+
+	public Long getId() {
+		return id;
+	}
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getMethod() {
+		return method;
+	}
+
+	public void setMethod(String method) {
+		this.method = method;
+	}
+
+	public String getUrl() {
+		return url;
+	}
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+	public String getRemark() {
+		return remark;
+	}
+
+	public void setRemark(String remark) {
+		this.remark = remark;
+	}
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+}
