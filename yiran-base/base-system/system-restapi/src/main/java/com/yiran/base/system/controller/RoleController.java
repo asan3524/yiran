@@ -22,6 +22,7 @@ import com.yiran.base.core.data.PageRequestData;
 import com.yiran.base.core.data.PageResponseData;
 import com.yiran.base.core.data.RespData;
 import com.yiran.base.core.util.CommonUtils;
+import com.yiran.base.core.util.IdUtil;
 import com.yiran.base.system.domain.service.LoadService;
 import com.yiran.base.system.domain.service.RoleService;
 import com.yiran.base.system.object.Role;
@@ -39,7 +40,7 @@ public class RoleController extends BaseController {
 	private LoadService loadService;
 
 	@GetMapping(value = "/{id}")
-	public Object findById(@PathVariable Long id) {
+	public Object findById(@PathVariable String id) {
 		RespData<Role> result = roleService.get(id);
 		return response(result);
 	}
@@ -65,7 +66,17 @@ public class RoleController extends BaseController {
 			return error(message);
 		}
 
+		if (CommonUtils.isNull(role.getId())) {
+			role.setId(IdUtil.generateId().toString());
+		}
+
 		BaseRespData result = roleService.save(role);
+
+		// 保存成功后缓存
+		if (Code.SC_OK == result.getCode()) {
+			CompletableFuture.supplyAsync(() -> roleService.load(role.getId()));
+		}
+
 		return response(result);
 	}
 
@@ -83,16 +94,23 @@ public class RoleController extends BaseController {
 
 		BaseRespData result = roleService.update(role);
 
-		CompletableFuture.supplyAsync(() -> loadService.loadUser());
+		// 保存成功后缓存
+		if (Code.SC_OK == result.getCode()) {
+			CompletableFuture.supplyAsync(() -> roleService.load(role.getId()));
+			CompletableFuture.supplyAsync(() -> loadService.loadUser());
+		}
 
 		return response(result);
 	}
 
 	@DeleteMapping(value = "/delete/{id}")
-	public Object delete(@PathVariable Long id) throws Exception {
+	public Object delete(@PathVariable String id) throws Exception {
 		BaseRespData result = roleService.delete(id);
 
-		CompletableFuture.supplyAsync(() -> loadService.loadUser());
+		// 删除成功后刷新user缓存
+		if (Code.SC_OK == result.getCode()) {
+			CompletableFuture.supplyAsync(() -> loadService.loadUser());
+		}
 		return response(result);
 	}
 }

@@ -39,41 +39,20 @@ public class UserService {
 	private UserRepository userRepository;
 
 	@Autowired
+	private RoleService roleService;
+
+	@Autowired
 	private RedisCacheComponent<User> userCacheComponent;
 
 	@Autowired
-	private RoleService roleService;
+	private RedisCacheComponent<String> cacheComponent;
 
 	public BaseRespData save(User user) {
 
 		BaseRespData brd = new BaseRespData();
-		if (CommonUtils.isNull(user.getAccount())) {
-			brd.setCode(Code.SC_BAD_REQUEST);
-			brd.setMessage("account can not be null");
-			return brd;
-		}
-		// if (CommonUtils.isNull(user.getEmail())) {
-		// brd.setCode(Code.SC_BAD_REQUEST);
-		// brd.setMessage("email can not be null");
-		// return brd;
-		// }
-		// if (CommonUtils.isNull(user.getMobile())) {
-		// brd.setCode(Code.SC_BAD_REQUEST);
-		// brd.setMessage("mobile can not be null");
-		// return brd;
-		// }
-
-		// if
-		// (cacheComponent.hashExist(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID,
-		// user.getAccount())) {
-		// brd.setCode(Code.SC_BAD_REQUEST);
-		// brd.setMessage("account is exist");
-		// return brd;
-		// }
 
 		List<Role> roles = new ArrayList<Role>();
 
-		user.setId(null);
 		UserInfo userInfo = CopyUtil.copy(user, UserInfo.class);
 
 		if (CommonUtils.isNotNull(user.getRoles())) {
@@ -98,27 +77,19 @@ public class UserService {
 		}
 
 		userRepository.save(userInfo);
-		// 保存成功后缓存
-		if (CommonUtils.isNotNull(userInfo.getId())) {
-
-			User userChache = CopyUtil.copy(userInfo, User.class);
-			userChache.setRoles(roles);
-
-			userCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, user.getAccount(), userChache);
-		}
 
 		brd.setCode(Code.SC_OK);
 		return brd;
 	}
 
-	public BaseRespData delete(Long id) {
+	public BaseRespData delete(String id) {
 
 		BaseRespData brd = new BaseRespData();
 
 		UserInfo userInfo = userRepository.getOne(id);
 		if (CommonUtils.isNotNull(userInfo)) {
 			// 删除缓存
-			userCacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, userInfo.getAccount());
+			userCacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, userInfo.getId());
 			userRepository.deleteById(id);
 			brd.setCode(Code.SC_OK);
 		} else {
@@ -131,16 +102,20 @@ public class UserService {
 
 	public BaseRespData update(User user) {
 		BaseRespData brd = new BaseRespData();
-		if (CommonUtils.isNull(user.getId())) {
+
+		RespData<User> rd = get(user.getId());
+
+		if (Code.SC_OK == rd.getCode() && null != rd.getData()) {
+			user = User.copy(rd.getData(), user);
+		} else {
 			brd.setCode(Code.SC_BAD_REQUEST);
-			brd.setMessage("update user id can not be null");
+			brd.setMessage("update user that is not exist");
 			return brd;
 		}
 
-		List<Role> roles = new ArrayList<Role>();
-		// 账号不能通过update修改
-		user.setAccount(null);
 		UserInfo userInfo = CopyUtil.copy(user, UserInfo.class);
+
+		List<Role> roles = new ArrayList<Role>();
 
 		if (CommonUtils.isNotNull(user.getRoles())) {
 
@@ -163,32 +138,46 @@ public class UserService {
 		}
 
 		userRepository.save(userInfo);
-		// 保存成功后缓存
-		if (CommonUtils.isNotNull(userInfo.getId())) {
-
-			User userChache = CopyUtil.copy(userInfo, User.class);
-			userChache.setRoles(roles);
-
-			userCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, user.getAccount(), userChache);
-		}
 
 		brd.setCode(Code.SC_OK);
 		return brd;
 	}
 
-	public RespData<User> get(Long id) {
-		RespData<User> rd = new RespData<User>();
+	public BaseRespData load(String id) {
+		BaseRespData brd = new BaseRespData();
 		User user = null;
 		Optional<UserInfo> temp = userRepository.findById(id);
 		if (temp.isPresent()) {
 			user = CopyUtil.copy(temp.get(), User.class);
-			userCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, user.getAccount(), user);
+			userCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id, user);
 
+			brd.setCode(Code.SC_OK);
+		} else {
+			brd.setCode(Code.SC_BAD_REQUEST);
+			brd.setMessage("user by id {" + id + "} is not exist");
+		}
+		return brd;
+	}
+
+	public RespData<User> get(String id) {
+		RespData<User> rd = new RespData<User>();
+		User user = userCacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id, User.class);
+
+		if (null != user) {
 			rd.setCode(Code.SC_OK);
 			rd.setData(user);
 		} else {
-			rd.setCode(Code.SC_BAD_REQUEST);
-			rd.setMessage("user by id {" + id + "} is not exist");
+			Optional<UserInfo> temp = userRepository.findById(id);
+			if (temp.isPresent()) {
+				user = CopyUtil.copy(temp.get(), User.class);
+				userCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id, user);
+
+				rd.setCode(Code.SC_OK);
+				rd.setData(user);
+			} else {
+				rd.setCode(Code.SC_BAD_REQUEST);
+				rd.setMessage("user by id {" + id + "} is not exist");
+			}
 		}
 		return rd;
 	}
@@ -197,7 +186,24 @@ public class UserService {
 
 		RespData<User> rd = new RespData<User>();
 
-		User user = userCacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, account, User.class);
+		String id = cacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ACCOUNT, account, String.class);
+
+		User user = null;
+
+		if (null != id) {
+			user = userCacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id, User.class);
+
+			if (null != user) {
+				if (user.getAccount().equals(account)) {
+					rd.setCode(Code.SC_OK);
+					rd.setData(user);
+				} else {
+					user = null;
+					cacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ACCOUNT, account);
+					userCacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id);
+				}
+			}
+		}
 
 		if (null != user) {
 			rd.setCode(Code.SC_OK);
@@ -208,7 +214,9 @@ public class UserService {
 			if (null != userInfo) {
 				user = CopyUtil.copy(user, User.class);
 
-				userCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, user.getAccount(), user);
+				userCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, user.getId(), user);
+
+				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ACCOUNT, user.getAccount(), user.getId());
 
 				rd.setCode(Code.SC_OK);
 				rd.setData(user);

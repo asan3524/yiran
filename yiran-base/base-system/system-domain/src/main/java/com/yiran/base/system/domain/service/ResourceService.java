@@ -41,32 +41,22 @@ public class ResourceService {
 
 		BaseRespData brd = new BaseRespData();
 
-		resource.setId(null);
 		ResourceInfo resourceInfo = CopyUtil.copy(resource, ResourceInfo.class);
 
 		resourceRepository.save(resourceInfo);
-		// 保存成功后缓存
-		if (CommonUtils.isNotNull(resourceInfo.getId())) {
-
-			Resource resourceChache = CopyUtil.copy(resourceInfo, Resource.class);
-
-			resourceCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID,
-					resourceChache.getId().toString(), resourceChache);
-		}
 
 		brd.setCode(Code.SC_OK);
 		return brd;
 	}
 
-	public BaseRespData delete(Long id) {
+	public BaseRespData delete(String id) {
 
 		BaseRespData brd = new BaseRespData();
 
 		ResourceInfo resourceInfo = resourceRepository.getOne(id);
 		if (CommonUtils.isNotNull(resourceInfo)) {
 			// 删除缓存
-			resourceCacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID,
-					resourceInfo.getId().toString());
+			resourceCacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, resourceInfo.getId());
 
 			resourceRepository.cleanRoleToResource(id);
 
@@ -83,31 +73,44 @@ public class ResourceService {
 
 	public BaseRespData update(Resource resource) {
 		BaseRespData brd = new BaseRespData();
-		if (CommonUtils.isNull(resource.getId())) {
+
+		RespData<Resource> rd = get(resource.getId());
+
+		if (Code.SC_OK == rd.getCode() && null != rd.getData()) {
+			resource = Resource.copy(rd.getData(), resource);
+		} else {
 			brd.setCode(Code.SC_BAD_REQUEST);
-			brd.setMessage("update resource id can not be null");
+			brd.setMessage("update resource that is not exist");
 			return brd;
 		}
 
 		ResourceInfo resourceInfo = CopyUtil.copy(resource, ResourceInfo.class);
 
 		resourceRepository.save(resourceInfo);
-		// 保存成功后缓存
-		if (CommonUtils.isNotNull(resourceInfo.getId())) {
-
-			Resource resourceChache = CopyUtil.copy(resourceInfo, Resource.class);
-
-			resourceCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID,
-					resourceChache.getId().toString(), resourceChache);
-		}
 
 		brd.setCode(Code.SC_OK);
 		return brd;
 	}
 
-	public RespData<Resource> get(Long id) {
+	public BaseRespData load(String id) {
+		BaseRespData brd = new BaseRespData();
+		Resource resource = null;
+		Optional<ResourceInfo> temp = resourceRepository.findById(id);
+		if (temp.isPresent()) {
+			resource = CopyUtil.copy(temp.get(), Resource.class);
+			resourceCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, resource.getId(), resource);
+
+			brd.setCode(Code.SC_OK);
+		} else {
+			brd.setCode(Code.SC_BAD_REQUEST);
+			brd.setMessage("resource by id {" + id + "} is not exist");
+		}
+		return brd;
+	}
+
+	public RespData<Resource> get(String id) {
 		RespData<Resource> rd = new RespData<Resource>();
-		Resource resource = resourceCacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, id.toString(),
+		Resource resource = resourceCacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, id,
 				Resource.class);
 
 		if (null != resource) {
@@ -117,8 +120,8 @@ public class ResourceService {
 			Optional<ResourceInfo> temp = resourceRepository.findById(id);
 			if (temp.isPresent()) {
 				resource = CopyUtil.copy(temp.get(), Resource.class);
-				resourceCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID,
-						resource.getId().toString(), resource);
+				resourceCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, resource.getId(),
+						resource);
 
 				rd.setCode(Code.SC_OK);
 				rd.setData(resource);

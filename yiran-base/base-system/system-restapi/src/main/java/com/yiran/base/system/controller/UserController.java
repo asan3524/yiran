@@ -1,6 +1,7 @@
 package com.yiran.base.system.controller;
 
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +22,7 @@ import com.yiran.base.core.data.PageRequestData;
 import com.yiran.base.core.data.PageResponseData;
 import com.yiran.base.core.data.RespData;
 import com.yiran.base.core.util.CommonUtils;
+import com.yiran.base.core.util.IdUtil;
 import com.yiran.base.system.domain.service.UserService;
 import com.yiran.base.system.object.User;
 import com.yiran.base.system.qo.UserQo;
@@ -36,7 +38,7 @@ public class UserController extends BaseController {
 	private UserService userService;
 
 	@GetMapping(value = "/{id}")
-	public Object findById(@PathVariable Long id) {
+	public Object findById(@PathVariable String id) {
 		RespData<User> result = userService.get(id);
 		return response(result);
 	}
@@ -68,7 +70,21 @@ public class UserController extends BaseController {
 			return error(message);
 		}
 
+		if (CommonUtils.isNull(user.getAccount())) {
+			return response(Code.SC_BAD_REQUEST, "account can not be null");
+		}
+
+		if (CommonUtils.isNull(user.getId())) {
+			user.setId(IdUtil.generateId().toString());
+		}
+
 		BaseRespData result = userService.save(user);
+
+		// 保存成功后缓存
+		if (Code.SC_OK == result.getCode()) {
+			CompletableFuture.supplyAsync(() -> userService.load(user.getId()));
+		}
+
 		return response(result);
 	}
 
@@ -85,11 +101,17 @@ public class UserController extends BaseController {
 		}
 
 		BaseRespData result = userService.update(user);
+
+		// 保存成功后缓存
+		if (Code.SC_OK == result.getCode()) {
+			CompletableFuture.supplyAsync(() -> userService.load(user.getId()));
+		}
+
 		return response(result);
 	}
 
 	@DeleteMapping(value = "/delete/{id}")
-	public Object delete(@PathVariable Long id) throws Exception {
+	public Object delete(@PathVariable String id) throws Exception {
 		BaseRespData result = userService.delete(id);
 		return response(result);
 	}

@@ -54,13 +54,20 @@ public class LoadService {
 
 		if (CommonUtils.isNotNull(users)) {
 			Map<String, String> umap = new HashMap<String, String>();
+
+			Map<String, String> accountmap = new HashMap<String, String>();
 			for (UserInfo ui : users) {
 				User user = CopyUtil.copy(ui, User.class);
 				if (null != user) {
-					umap.put(user.getAccount(), GsonUtil.dateGson().toJson(user));
+					umap.put(user.getId(), GsonUtil.dateGson().toJson(user));
+					accountmap.put(user.getAccount(), user.getId());
 				}
 			}
+			userCacheComponent.delete(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID);
 			userCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, umap);
+
+			userCacheComponent.delete(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ACCOUNT);
+			userCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ACCOUNT, accountmap);
 		}
 
 		brd.setCode(Code.SC_OK);
@@ -81,6 +88,7 @@ public class LoadService {
 					umap.put(role.getId().toString(), GsonUtil.dateGson().toJson(role));
 				}
 			}
+			roleCacheComponent.delete(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID);
 			roleCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, umap);
 		}
 
@@ -102,6 +110,7 @@ public class LoadService {
 					umap.put(resource.getId().toString(), GsonUtil.dateGson().toJson(resource));
 				}
 			}
+			resourceCacheComponent.delete(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID);
 			resourceCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, umap);
 		}
 

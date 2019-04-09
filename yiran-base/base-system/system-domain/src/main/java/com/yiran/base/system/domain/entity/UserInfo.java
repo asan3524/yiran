@@ -6,8 +6,6 @@ import java.util.List;
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
@@ -16,16 +14,19 @@ import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "sys_user_info")
 public class UserInfo implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private String id;
 
 	@Column(unique = true)
 	private String account;
@@ -33,15 +34,13 @@ public class UserInfo implements java.io.Serializable {
 	private String name;
 	private String password;
 
-	@Column(unique = true)
 	private String email;
 
-	@Column(unique = true)
 	private String mobile;
 	private String remark;
 
 	@Column(name = "enabled", length = 1, columnDefinition = "tinyint default 1")
-	private boolean enabled;
+	private Boolean enabled;
 
 	@Column(name = "sex", length = 1, columnDefinition = "tinyint default 1")
 	private Integer sex;
@@ -56,11 +55,11 @@ public class UserInfo implements java.io.Serializable {
 			@JoinColumn(name = "role_id") })
 	private List<RoleInfo> roles;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -112,11 +111,11 @@ public class UserInfo implements java.io.Serializable {
 		this.remark = remark;
 	}
 
-	public boolean isEnabled() {
+	public Boolean getEnabled() {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
 

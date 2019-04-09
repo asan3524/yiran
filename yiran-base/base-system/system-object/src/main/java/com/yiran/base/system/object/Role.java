@@ -10,7 +10,21 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 public class Role {
 
-	private Long id;
+	public static Role copy(Role original, Role update) {
+		// TODO Auto-generated constructor stub
+		if (null == update.getName()) {
+			update.setName(original.getName());
+		}
+		if (null == update.getRemark()) {
+			update.setRemark(original.getRemark());
+		}
+		if (null == update.getCreateTime()) {
+			update.setCreateTime(original.getCreateTime());
+		}
+		return update;
+	}
+
+	private String id;
 	private String code;
 	private String name;
 	private String remark;
@@ -18,11 +32,11 @@ public class Role {
 	private Date createTime;
 	private List<Resource> resources;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

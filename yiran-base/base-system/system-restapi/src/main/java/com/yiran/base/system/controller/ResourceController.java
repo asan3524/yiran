@@ -22,6 +22,7 @@ import com.yiran.base.core.data.PageRequestData;
 import com.yiran.base.core.data.PageResponseData;
 import com.yiran.base.core.data.RespData;
 import com.yiran.base.core.util.CommonUtils;
+import com.yiran.base.core.util.IdUtil;
 import com.yiran.base.system.domain.service.LoadService;
 import com.yiran.base.system.domain.service.ResourceService;
 import com.yiran.base.system.object.Resource;
@@ -37,9 +38,9 @@ public class ResourceController extends BaseController {
 
 	@Autowired
 	private LoadService loadService;
-	
+
 	@GetMapping(value = "/{id}")
-	public Object findById(@PathVariable Long id) {
+	public Object findById(@PathVariable String id) {
 		RespData<Resource> result = resourceService.get(id);
 		return response(result);
 	}
@@ -65,7 +66,17 @@ public class ResourceController extends BaseController {
 			return error(message);
 		}
 
+		if (CommonUtils.isNull(resource.getId())) {
+			resource.setId(IdUtil.generateId().toString());
+		}
+
 		BaseRespData result = resourceService.save(resource);
+
+		// 保存成功后缓存
+		if (Code.SC_OK == result.getCode()) {
+			CompletableFuture.supplyAsync(() -> resourceService.load(resource.getId()));
+		}
+
 		return response(result);
 	}
 
@@ -83,19 +94,26 @@ public class ResourceController extends BaseController {
 		}
 
 		BaseRespData result = resourceService.update(resource);
-		
-		CompletableFuture.supplyAsync(() -> loadService.loadUser());
-		CompletableFuture.supplyAsync(() -> loadService.loadRole());
-		
+
+		// 保存成功后缓存
+		if (Code.SC_OK == result.getCode()) {
+			CompletableFuture.supplyAsync(() -> resourceService.load(resource.getId()));
+			CompletableFuture.supplyAsync(() -> loadService.loadUser());
+			CompletableFuture.supplyAsync(() -> loadService.loadRole());
+		}
+
 		return response(result);
 	}
 
 	@DeleteMapping(value = "/delete/{id}")
-	public Object delete(@PathVariable Long id) throws Exception {
+	public Object delete(@PathVariable String id) throws Exception {
 		BaseRespData result = resourceService.delete(id);
-		
-		CompletableFuture.supplyAsync(() -> loadService.loadUser());
-		CompletableFuture.supplyAsync(() -> loadService.loadRole());
+
+		// 删除成功后刷新user和role缓存
+		if (Code.SC_OK == result.getCode()) {
+			CompletableFuture.supplyAsync(() -> loadService.loadUser());
+			CompletableFuture.supplyAsync(() -> loadService.loadRole());
+		}
 		
 		return response(result);
 	}

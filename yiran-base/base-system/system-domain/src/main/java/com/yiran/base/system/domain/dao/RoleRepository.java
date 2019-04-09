@@ -10,9 +10,9 @@ import org.springframework.stereotype.Repository;
 import com.yiran.base.system.domain.entity.RoleInfo;
 
 @Repository
-public interface RoleRepository extends JpaRepository<RoleInfo, Long>, JpaSpecificationExecutor<RoleInfo> {
+public interface RoleRepository extends JpaRepository<RoleInfo, String>, JpaSpecificationExecutor<RoleInfo> {
 
 	@Modifying
 	@Query(value = "delete from sys_user_role where role_id = :role_id", nativeQuery = true)
-	void cleanUserToRole(@Param("role_id") Long role_id);
+	void cleanUserToRole(@Param("role_id") String role_id);
 }

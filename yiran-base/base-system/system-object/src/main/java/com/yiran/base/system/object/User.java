@@ -11,24 +11,50 @@ import org.springframework.format.annotation.DateTimeFormat;
  */
 public class User {
 
-	private Long id;
+	public static User copy(User original, User update) {
+		// TODO Auto-generated constructor stub
+		if (null == update.getName()) {
+			update.setName(original.getName());
+		}
+		if (null == update.getPassword()) {
+			update.setPassword(original.getPassword());
+		}
+		if (null == update.getEmail()) {
+			update.setEmail(original.getEmail());
+		}
+		if (null == update.getMobile()) {
+			update.setMobile(original.getMobile());
+		}
+		if (null == update.getRemark()) {
+			update.setRemark(original.getRemark());
+		}
+		if(null == update.getEnabled()) {
+			update.setEnabled(original.getEnabled());
+		}
+		if (null == update.getCreateTime()) {
+			update.setCreateTime(original.getCreateTime());
+		}
+		return update;
+	}
+
+	private String id;
 	private String account;
 	private String name;
 	private String password;
 	private String email;
 	private String mobile;
 	private String remark;
-	private boolean enabled;
+	private Boolean enabled;
 	@DateTimeFormat(pattern = "yyyy-MM-dd HH:mm:ss")
 	private Date createTime;
 
 	private List<Role> roles = new ArrayList<>();
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -80,11 +106,11 @@ public class User {
 		this.remark = remark;
 	}
 
-	public boolean isEnabled() {
+	public Boolean getEnabled() {
 		return enabled;
 	}
 
-	public void setEnabled(boolean enabled) {
+	public void setEnabled(Boolean enabled) {
 		this.enabled = enabled;
 	}
 

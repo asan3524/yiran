@@ -11,9 +11,9 @@ import org.springframework.stereotype.Repository;
 import com.yiran.base.system.domain.entity.ResourceInfo;
 
 @Repository
-public interface ResourceRepository extends JpaRepository<ResourceInfo, Long>, JpaSpecificationExecutor<ResourceInfo> {
+public interface ResourceRepository extends JpaRepository<ResourceInfo, String>, JpaSpecificationExecutor<ResourceInfo> {
 
 	@Modifying
 	@Query(value = "delete from sys_role_resource where resource_id = :resource_id", nativeQuery = true)
-	void cleanRoleToResource(@Param("resource_id") Long resource_id);
+	void cleanRoleToResource(@Param("resource_id") String resource_id);
 }

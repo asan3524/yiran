@@ -4,23 +4,24 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import javax.persistence.Temporal;
 import javax.persistence.TemporalType;
 
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
 import org.springframework.format.annotation.DateTimeFormat;
 
 @Entity
+@DynamicInsert
+@DynamicUpdate
 @Table(name = "sys_resource_info")
 public class ResourceInfo implements java.io.Serializable {
 
 	private static final long serialVersionUID = 1L;
 	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Long id;
+	private String id;
 	private String name;
 	/**
 	 * GET, HEAD, POST, PUT, PATCH, DELETE, OPTIONS, TRACE;
@@ -35,11 +36,11 @@ public class ResourceInfo implements java.io.Serializable {
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date createTime;
 
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 

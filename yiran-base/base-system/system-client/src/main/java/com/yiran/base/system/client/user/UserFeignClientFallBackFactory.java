@@ -20,7 +20,7 @@ public class UserFeignClientFallBackFactory implements FallbackFactory<UserFeign
 		return new UserFeignClient() {
 
 			@Override
-			public String findById(Long id) {
+			public String findById(String id) {
 				// TODO Auto-generated method stub
 				Logger.info("fallback; reason: ", cause);
 				return null;
@@ -45,16 +45,18 @@ public class UserFeignClientFallBackFactory implements FallbackFactory<UserFeign
 			}
 
 			@Override
-			public String update(Long id, User user) {
+			public String update(String id, User user) {
 				// TODO Auto-generated method stub
 				return null;
 			}
 
 			@Override
-			public String delete(Long id) {
+			public String delete(String id) {
 				// TODO Auto-generated method stub
 				return null;
 			}
+
+			
 
 		};
 	}

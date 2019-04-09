@@ -12,7 +12,7 @@ import com.yiran.base.system.qo.UserQo;
 @FeignClient(name = "yiran-system-restapi", fallbackFactory = UserFeignClientFallBackFactory.class)
 public interface UserFeignClient {
 	@RequestMapping(method = RequestMethod.GET, value = "/user/{id}")
-	String findById(@RequestParam("id") Long id);
+	String findById(@RequestParam("id") String id);
 
 	@RequestMapping(method = RequestMethod.POST, value = "/user/account")
 	String findByAccount(@RequestBody String account);
@@ -25,8 +25,8 @@ public interface UserFeignClient {
 	String save(@RequestBody User user);
 
 	@RequestMapping(method = RequestMethod.PUT, value = "/user/update/{id}")
-	String update(@RequestParam("id") Long id, @RequestBody User user);
+	String update(@RequestParam("id") String id, @RequestBody User user);
 
 	@RequestMapping(method = RequestMethod.DELETE, value = "/user/delete/{id}")
-	String delete(@RequestParam("id") Long id);
+	String delete(@RequestParam("id") String id);
 }

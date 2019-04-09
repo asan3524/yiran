@@ -48,7 +48,6 @@ public class RoleService {
 
 		BaseRespData brd = new BaseRespData();
 
-		role.setId(null);
 		RoleInfo roleInfo = CopyUtil.copy(role, RoleInfo.class);
 
 		List<Resource> resources = new ArrayList<Resource>();
@@ -71,32 +70,22 @@ public class RoleService {
 				}
 			}
 			roleInfo.setResources(resourceInfos);
-			;
 		}
 
 		roleRepository.save(roleInfo);
-		// 保存成功后缓存
-		if (CommonUtils.isNotNull(roleInfo.getId())) {
-
-			Role roleChache = CopyUtil.copy(roleInfo, Role.class);
-			roleChache.setResources(resources);
-
-			roleCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, roleChache.getId().toString(),
-					roleChache);
-		}
 
 		brd.setCode(Code.SC_OK);
 		return brd;
 	}
 
-	public BaseRespData delete(Long id) {
+	public BaseRespData delete(String id) {
 
 		BaseRespData brd = new BaseRespData();
 
 		RoleInfo roleInfo = roleRepository.getOne(id);
 		if (CommonUtils.isNotNull(roleInfo)) {
 			// 删除缓存
-			roleCacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, roleInfo.getId().toString());
+			roleCacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, roleInfo.getId());
 
 			roleRepository.cleanUserToRole(id);
 
@@ -113,9 +102,14 @@ public class RoleService {
 
 	public BaseRespData update(Role role) {
 		BaseRespData brd = new BaseRespData();
-		if (CommonUtils.isNull(role.getId())) {
+
+		RespData<Role> rd = get(role.getId());
+
+		if (Code.SC_OK == rd.getCode() && null != rd.getData()) {
+			role = Role.copy(rd.getData(), role);
+		}else {
 			brd.setCode(Code.SC_BAD_REQUEST);
-			brd.setMessage("update role id can not be null");
+			brd.setMessage("update role that is not exist");
 			return brd;
 		}
 
@@ -144,24 +138,31 @@ public class RoleService {
 		}
 
 		roleRepository.save(roleInfo);
-		// 保存成功后缓存
-		if (CommonUtils.isNotNull(roleInfo.getId())) {
-
-			Role roleChache = CopyUtil.copy(roleInfo, Role.class);
-			roleChache.setResources(resources);
-
-			roleCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, roleChache.getId().toString(),
-					roleChache);
-		}
 
 		brd.setCode(Code.SC_OK);
 		return brd;
 	}
 
-	public RespData<Role> get(Long id) {
+	public BaseRespData load(String id) {
+		BaseRespData brd = new BaseRespData();
+		Role role = null;
+		Optional<RoleInfo> temp = roleRepository.findById(id);
+		if (temp.isPresent()) {
+			role = CopyUtil.copy(temp.get(), Role.class);
+			roleCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, role.getId(), role);
+
+			brd.setCode(Code.SC_OK);
+		} else {
+			brd.setCode(Code.SC_BAD_REQUEST);
+			brd.setMessage("role by id {" + id + "} is not exist");
+		}
+		return brd;
+	}
+
+	public RespData<Role> get(String id) {
 		RespData<Role> rd = new RespData<Role>();
 
-		Role role = roleCacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, id.toString(), Role.class);
+		Role role = roleCacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, id, Role.class);
 
 		if (null != role) {
 			rd.setCode(Code.SC_OK);
@@ -170,7 +171,7 @@ public class RoleService {
 			Optional<RoleInfo> temp = roleRepository.findById(id);
 			if (temp.isPresent()) {
 				role = CopyUtil.copy(temp.get(), Role.class);
-				roleCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, role.getId().toString(), role);
+				roleCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, role.getId(), role);
 
 				rd.setCode(Code.SC_OK);
 				rd.setData(role);

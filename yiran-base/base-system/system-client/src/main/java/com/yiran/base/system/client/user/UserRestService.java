@@ -23,7 +23,7 @@ public class UserRestService {
 		return GsonUtil.dateGson().fromJson(json, BaseRespData.class);
 	}
 
-	public BaseRespData delete(Long id) {
+	public BaseRespData delete(String id) {
 		String json = userFeignClient.delete(id);
 		return GsonUtil.dateGson().fromJson(json, BaseRespData.class);
 	}
@@ -34,7 +34,7 @@ public class UserRestService {
 	}
 
 	@SuppressWarnings("serial")
-	public RespData<User> get(Long id) {
+	public RespData<User> get(String id) {
 		String json = userFeignClient.findById(id);
 		return GsonUtil.dateGson().fromJson(json, new TypeToken<RespData<User>>() {
 		}.getType());

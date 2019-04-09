@@ -1,46 +1,75 @@
 package com.yiran.base.system;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import org.junit.Assert;
-import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
+import org.springframework.test.context.testng.AbstractTestNGSpringContextTests;
+import org.testng.Assert;
+import org.testng.annotations.BeforeTest;
+import org.testng.annotations.Test;
 
 import com.yiran.base.core.code.Code;
 import com.yiran.base.core.data.BaseRespData;
-import com.yiran.base.system.client.user.UserRestService;
-import com.yiran.base.system.object.Role;
-import com.yiran.base.system.object.User;
+import com.yiran.base.core.util.IdUtil;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest(classes = ApplicationTest.class)
-public class UserTest {
+public class MainTest extends AbstractTestNGSpringContextTests {
 	@Autowired
-	private UserRestService userRestService;
+	private UserServiceTest userServiceTest;
 
-	@Test
-	public void save() {
-		User user = new User();
-		user.setAccount("lishibang");
-		user.setName("lishibang");
-		user.setPassword("123456");
-		user.setEmail("lsb3524@163.com");
+	@Autowired
+	private RoleServiceTest roleServiceTest;
 
-		List<Role> roles = new ArrayList<Role>();
-		Role role = new Role();
-		role.setId(1l);
-		role.setName("ADMIN");
+	@Autowired
+	private ResourceServiceTest resourceServiceTest;
 
-		roles.add(role);
+	private String[] userIds;
 
-		user.setRoles(roles);
-		BaseRespData result = userRestService.save(user);
+	private String[] roleIds;
 
-		System.out.println(result);
-		Assert.assertTrue(Code.SC_OK == result.getCode());
+	private String[] resourceIds;
+	
+	@BeforeTest
+	public void init() {
+		userIds = new String[]{IdUtil.generateId().toString()};
+		roleIds = new String[]{IdUtil.generateId().toString()};
+		resourceIds = new String[]{IdUtil.generateId().toString()};
+	}
+	
+	@Test(groups = "save")
+	public void saveResource() {
+		BaseRespData br = resourceServiceTest.save(resourceIds[0]);
+
+		Assert.assertEquals(br.getCode(), Code.SC_OK);
+	}
+
+	@Test(groups = "save")
+	public void saveRole() {
+		BaseRespData br = roleServiceTest.save(roleIds[0]);
+
+		Assert.assertEquals(br.getCode(), Code.SC_OK);
+	}
+
+	@Test(groups = "save")
+	public void saveUser() {
+		BaseRespData br = userServiceTest.save(userIds[0]);
+
+		Assert.assertEquals(br.getCode(), Code.SC_OK);
+	}
+
+	@Test(dependsOnGroups = "save")
+	public void updateRole() {
+		BaseRespData br = roleServiceTest.update(roleIds[0], resourceIds);
+
+		Assert.assertEquals(br.getCode(), Code.SC_OK);
+	}
+
+	@Test(dependsOnMethods = "updateRole")
+	public void updateUser() {
+		BaseRespData br = userServiceTest.update(userIds[0], roleIds);
+
+		Assert.assertEquals(br.getCode(), Code.SC_OK);
 	}
 }
