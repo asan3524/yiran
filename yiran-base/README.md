@@ -13,8 +13,13 @@
     - [base-eureka](#base-eureka)
     - [base-turbine](#base-turbine)
     - [base-zipkin](#base-zipkin)
-    - [base-oauth2](#base-oauth2)
+    - [base-authorization](#base-authorization)
     - [base-system](#base-system)
+    - [base-core](#base-core)
+    - [base-web](#base-web)
+    - [base-security](#base-security)
+    - [base-resource](#base-resource)
+    - [base-sso](#base-sso)
 
 ## 概述
 
@@ -25,11 +30,12 @@
 |服务名称|port:nodeport|集群规模|服务说明|
 |:-|:-|:-:|:-|
 |rabbitmq|5672->34672<br>15672->34673|1|默认消息服务|
-|base-config|8888->34888|2|集中动态配置服务，要求所有微服务均使用配置<br>管理服务，并且区分测试环境与开发环境|
+|base-config|8888->34888|2|集中动态配置服务，要求所有微服务<br>均使用配置管理服务，并且区分测试环境<br>与开发环境|
 |base-eureka|8761->34761<br>8761->34762|2|注册中心，使用多service方式集群部署|
 |base-turbine|8989->34989|1|服务监控面板及聚合|
 |base-zipkin||1|链路跟踪及日志聚合|
-|base-oauth2|8887->34887|1|鉴权服务|
+|base-authorization|8887->34887|1|鉴权服务|
+|base-system|8088->34808|1|用户、角色、资源管理服务|
 
 ## 详细说明
 
@@ -75,7 +81,7 @@
 
 
 ---
-#### base-oauth2
+#### base-authorization
 -   **Version: V.1.0.0**
 -   **Features:**
     -   默认端口为8887
@@ -92,13 +98,13 @@ security:
     oauth2:
         authorization:
             loginurl: /login
-            deniedurl: /deny
+            deniedurl: /errors/403
             matchers: /images/**, /checkcode, /scripts/**, /styles/**            
 配置鉴权服务信息
     client:
         client-id: eagleeye
         client-secret: thisissecret
-        authorized-grant-types: refresh_token, password, client_credentials
+        authorized-grant-types: authorization_code, refresh_token, password, client_credentials
         scope: webclient, mobileclient
 ```
 
@@ -110,4 +116,18 @@ security:
     -   为base-oauth2提供登录验证
     -   为base-security提供角色检索
 
-    
+
+---
+#### base-core    
+
+---
+#### base-web  
+
+---
+#### base-security  
+
+---
+#### base-resource  
+
+---
+#### base-sso  
