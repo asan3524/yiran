@@ -5,6 +5,8 @@ target/
 *.springBeans
 *.settings/
 
+*test-output/
+
 ### STS ###
 /*/.apt_generated
 /*/.factorypath
