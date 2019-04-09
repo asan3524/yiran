@@ -19,20 +19,21 @@
 		<yiran.web.version>0.0.1-SNAPSHOT</yiran.web.version>
 		<yiran.security.version>0.0.1-SNAPSHOT</yiran.security.version>
 		<yiran.resource.version>0.0.1-SNAPSHOT</yiran.resource.version>
-		<yiran.soo.version>0.0.1-SNAPSHOT</yiran.soo.version>
+		<yiran.sso.version>0.0.1-SNAPSHOT</yiran.sso.version>
 		<yiran.system.version>0.0.1-SNAPSHOT</yiran.system.version>
 	</properties>
 	
 	<modules>
 		<module>base-core</module>
-		<module>base-security</module>
 		<module>base-web</module>
+		<module>base-security</module>
+		<module>base-resource</module>
+		<module>base-sso</module>
 		<module>base-system</module>
+		<module>base-authorization</module>
 		<module>base-config</module>
 		<module>base-eureka</module>
 		<module>base-turbine</module>
-		<module>base-authorization</module>
-		<module>base-resource</module>
 		<module>base-zipkin</module>
 	</modules>
 

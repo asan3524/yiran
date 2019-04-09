@@ -11,7 +11,7 @@ public class ConfigProperties {
 	@Value("${security.oauth2.authorization.loginurl:/login}")
 	private String loginurl;
 
-	@Value("${security.oauth2.authorization.deniedurl:/deny}")
+	@Value("${security.oauth2.authorization.deniedurl:/errors/403}")
 	private String deniedurl;
 
 	@Value("${security.oauth2.authorization.logouturl:/logout}")

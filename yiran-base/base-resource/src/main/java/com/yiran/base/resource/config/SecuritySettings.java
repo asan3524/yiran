@@ -8,7 +8,7 @@ import org.springframework.context.annotation.Configuration;
 @RefreshScope
 public class SecuritySettings {
 
-	@Value("${security.oauth2.authorization.matchers:/images/**, /checkcode, /scripts/**, /styles/**}")
+	@Value("${security.oauth2.authorization.matchers:/swagger-ui.html, /webjars/**, /swagger-resources/**, /v2/api-docs, /static/**}")
 	private String[] matchers;
 
 	@Value("${security.oauth2.authorization.intercepts:/**}")

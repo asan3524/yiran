@@ -26,7 +26,10 @@ public class ResourceSecurityConfigurer extends ResourceServerConfigurerAdapter 
 
 	@Override
 	public void configure(HttpSecurity http) throws Exception {
-		http.authorizeRequests().antMatchers(securitySettings.getMatchers()).permitAll().anyRequest().authenticated();
+		http // 根据配置文件放行无需验证的url
+				.authorizeRequests().antMatchers(securitySettings.getMatchers()).permitAll()
+				// 其他所有请求都需要验证令牌
+				.anyRequest().authenticated();
 	}
 
 	@Bean

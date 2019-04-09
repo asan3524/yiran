@@ -42,20 +42,18 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 	@Override
 	protected void configure(HttpSecurity http) throws Exception {
 
-		http // 根据配置文件放行无需验证的url
-				.authorizeRequests().antMatchers(configProperties.getMatchers()).permitAll().and().httpBasic()
-				// 关闭csrf
-				.and().csrf().disable()
+		http // 配置登陆url, 登陆页面并无需验证
+				.formLogin().loginPage(configProperties.getLoginurl()).permitAll().successHandler(loginSuccessHandler())
+				// 根据配置文件放行无需验证的url
+				.and().authorizeRequests().antMatchers(configProperties.getMatchers()).permitAll()
 				// 其他所有请求都需要验证
-				.authorizeRequests().anyRequest().authenticated()
-				// 配置登陆url, 登陆页面并无需验证
-				.and().formLogin().loginPage(configProperties.getLoginurl()).permitAll()
-				.successHandler(loginSuccessHandler())
+				.anyRequest().authenticated()
 				// 登出
 				.and().logout().logoutUrl(configProperties.getLogouturl()).permitAll()
 				// 错误页面
-				.and().exceptionHandling().accessDeniedPage(configProperties.getDeniedurl()).and().sessionManagement()
-				.sessionCreationPolicy(SessionCreationPolicy.NEVER);
+				.and().exceptionHandling().accessDeniedPage(configProperties.getDeniedurl())
+				// session 策略
+				.and().sessionManagement().sessionCreationPolicy(SessionCreationPolicy.NEVER);
 		if (null == redisTokenRepository) {
 			http.rememberMe().tokenValiditySeconds(configProperties.getTokenvalidity())
 					.tokenRepository(new InMemoryTokenRepositoryImpl());
