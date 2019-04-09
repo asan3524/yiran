@@ -14,7 +14,7 @@
 
 	<name>demo-provider</name>
 	<description>demo-provider</description>
-	
+
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -51,11 +51,16 @@
 		</dependency>
 		<dependency>
 			<groupId>com.yiran.base</groupId>
+			<artifactId>base-web</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.yiran.base</groupId>
 			<artifactId>base-security</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
-	
+
 	<build>
 		<plugins>
 			<plugin>

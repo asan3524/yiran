@@ -10,7 +10,6 @@
 		<groupId>com.yiran</groupId>
 		<artifactId>yiran-parent</artifactId>
 		<version>1.0.0</version>
-		<relativePath>../yiran-parent</relativePath>
 	</parent>
 
 	<modules>
@@ -24,14 +23,9 @@
 	
 	<dependencies>
 		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger-ui</artifactId>
-			<version>${swagger.version}</version>
-		</dependency>
-		<dependency>
-			<groupId>io.springfox</groupId>
-			<artifactId>springfox-swagger2</artifactId>
-			<version>${swagger.version}</version>
+			<groupId>com.yiran.base</groupId>
+			<artifactId>base-web</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 	</dependencies>
 </project>
