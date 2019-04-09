@@ -1,7 +1,7 @@
 package com.yiran.base.authorization.config;
 
-import javax.annotation.Resource;
-
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,7 +19,9 @@ import com.yiran.base.authorization.builder.RedisClientDetailsServiceBuilder;
 @EnableAuthorizationServer
 public class AuthorizationSecurityConfigurer extends AuthorizationServerConfigurerAdapter {
 
-	@Resource
+	private static final Logger Logger = LoggerFactory.getLogger(AuthorizationSecurityConfigurer.class);
+
+	@Autowired
 	private ConfigProperties configProperties;
 
 	@Autowired
@@ -40,6 +42,7 @@ public class AuthorizationSecurityConfigurer extends AuthorizationServerConfigur
 		if (null == redisClientDetailsServiceBuilder) {
 			clients.inMemory();
 		} else {
+			Logger.info("===================== load redis for save ClientDetails ====================");
 			clients.setBuilder(redisClientDetailsServiceBuilder);
 		}
 		clients.and().withClient(configProperties.getClient_id()).secret(configProperties.getClient_secret())

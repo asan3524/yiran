@@ -2,6 +2,8 @@ package com.yiran.base.authorization.config;
 
 import javax.annotation.Resource;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -19,6 +21,8 @@ import com.yiran.base.authorization.token.RedisTokenRepositoryImpl;
 
 @EnableWebSecurity
 public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
+
+	private static final Logger Logger = LoggerFactory.getLogger(WebSecurityConfigurer.class);
 
 	@Resource
 	private ConfigProperties configProperties;
@@ -56,6 +60,7 @@ public class WebSecurityConfigurer extends WebSecurityConfigurerAdapter {
 			http.rememberMe().tokenValiditySeconds(configProperties.getTokenvalidity())
 					.tokenRepository(new InMemoryTokenRepositoryImpl());
 		} else {
+			Logger.info("=====================load redis for rememberMe save tokens====================");
 			http.rememberMe().tokenValiditySeconds(configProperties.getTokenvalidity())
 					.tokenRepository(redisTokenRepository.validitySeconds(configProperties.getTokenvalidity()));
 		}

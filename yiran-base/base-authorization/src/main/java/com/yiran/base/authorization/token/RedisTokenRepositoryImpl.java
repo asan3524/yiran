@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.Date;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.autoconfigure.condition.ConditionalOnResource;
+import org.springframework.boot.autoconfigure.condition.ConditionalOnBean;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.web.authentication.rememberme.PersistentRememberMeToken;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
@@ -13,7 +13,7 @@ import org.springframework.stereotype.Component;
 import com.yiran.redis.cache.RedisCacheComponent;
 
 @Component
-@ConditionalOnResource(resources = "redisProperties")
+@ConditionalOnBean(name = "redisProperties")
 public class RedisTokenRepositoryImpl implements PersistentTokenRepository {
 
 	@Autowired

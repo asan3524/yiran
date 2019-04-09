@@ -27,6 +27,7 @@ public class SecurityUser extends User implements UserDetails {
 			this.setName(user.getName());
 			this.setEmail(user.getEmail());
 			this.setMobile(user.getMobile());
+			this.setEnabled(user.getEnabled());
 			this.setCreateTime(user.getCreateTime());
 			this.setRoles(user.getRoles());
 		}
@@ -53,6 +54,12 @@ public class SecurityUser extends User implements UserDetails {
 	@Override
 	public String getUsername() {
 		return this.getAccount();
+	}
+
+	@Override
+	public boolean isEnabled() {
+		// TODO Auto-generated method stub
+		return this.getEnabled();
 	}
 
 	public boolean isAccountNonExpired() {
