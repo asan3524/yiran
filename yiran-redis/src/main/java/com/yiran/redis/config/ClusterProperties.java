@@ -6,8 +6,8 @@ import org.springframework.context.annotation.Configuration;
 
 /**
  * @author lishibang 
- * 名称必须为redisProperties，以便外部使用@ConditionalOnResource(resources
- *         = "redisProperties")验证redis是否加载
+ * 名称必须为redisProperties，以便外部使用
+	@ConditionalOnBean(name = "redisProperties")验证redis是否加载
  */
 @Configuration("redisProperties")
 @ConditionalOnProperty(name = "spring.redis.cluster.nodes")

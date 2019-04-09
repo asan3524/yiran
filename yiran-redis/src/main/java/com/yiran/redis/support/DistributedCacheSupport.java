@@ -1,6 +1,7 @@
 package com.yiran.redis.support;
 
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 
 public interface DistributedCacheSupport<T> {
@@ -31,6 +32,8 @@ public interface DistributedCacheSupport<T> {
 
 	T hashGet(String key, String hashKey, Class<T> clazz);
 
+	List<T> hashGet(String key, Class<T> clazz);
+	
 	boolean delete(String key);
 
 	long delete(Collection<String> key);

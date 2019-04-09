@@ -1,6 +1,8 @@
 package com.yiran.redis.cache;
 
+import java.util.ArrayList;
 import java.util.Collection;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
@@ -109,6 +111,25 @@ public class RedisCacheComponent<T> implements DistributedCacheSupport<T> {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public List<T> hashGet(String key, Class<T> clazz) {
+		if (redisTemplate.hasKey(key)) {
+			BoundHashOperations<String, String, String> boundHashOperations = redisTemplate.boundHashOps(key);
+			List<String> values = boundHashOperations.values();
+			if (null != values && values.size() > 0) {
+				List<T> result = new ArrayList<T>();
+				for (String value : values) {
+					T t = jsonToObj(value, clazz);
+					if (null != t) {
+						result.add(t);
+					}
+				}
+				return result;
+			}
+		}
+		return null;
 	}
 
 	@Override
