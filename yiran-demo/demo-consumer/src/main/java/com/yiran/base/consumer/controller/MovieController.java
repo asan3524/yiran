@@ -23,6 +23,7 @@ public class MovieController {
 	@GetMapping("/{id}")
 	@ApiOperation(value = "获取用户", notes = "根据用户ID，获取用户详情")
 	public UserInfo findById(@PathVariable Long id) {
+		System.out.println("==========================================");
 		UserInfo user = userFeignClient.findById(id);
 		return user;
 	}
