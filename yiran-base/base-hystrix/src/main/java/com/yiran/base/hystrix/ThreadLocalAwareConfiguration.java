@@ -4,6 +4,7 @@ import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 
 import com.netflix.hystrix.strategy.HystrixPlugins;
 import com.netflix.hystrix.strategy.concurrency.HystrixConcurrencyStrategy;
@@ -13,6 +14,7 @@ import com.netflix.hystrix.strategy.metrics.HystrixMetricsPublisher;
 import com.netflix.hystrix.strategy.properties.HystrixPropertiesStrategy;
 
 @Configuration
+@Order
 public class ThreadLocalAwareConfiguration {
 
 	@Autowired(required = false)
@@ -20,6 +22,7 @@ public class ThreadLocalAwareConfiguration {
 
 	@PostConstruct
 	public void init() {
+		
 		HystrixEventNotifier eventNotifier = HystrixPlugins.getInstance().getEventNotifier();
 		HystrixMetricsPublisher metricsPublisher = HystrixPlugins.getInstance().getMetricsPublisher();
 		HystrixPropertiesStrategy propertiesStrategy = HystrixPlugins.getInstance().getPropertiesStrategy();

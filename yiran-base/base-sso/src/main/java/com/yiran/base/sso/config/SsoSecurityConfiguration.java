@@ -48,7 +48,10 @@ public class SsoSecurityConfiguration extends WebSecurityConfigurerAdapter {
 				// 开启csrf过滤
 				.and().csrf().requireCsrfProtectionMatcher(csrfSecurityRequestMatcher())
 				.csrfTokenRepository(csrfTokenRepository()).and().addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
-				.logout().and().exceptionHandling().accessDeniedPage(securitySettings.getDeniedurl());
+				// 登出
+				.logout().logoutUrl(securitySettings.getLogouturl()).permitAll()
+				// 错误
+				.and().exceptionHandling().accessDeniedPage(securitySettings.getDeniedurl());
 	}
 
 	@Bean

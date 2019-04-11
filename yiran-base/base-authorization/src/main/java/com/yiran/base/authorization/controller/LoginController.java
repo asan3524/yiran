@@ -45,6 +45,7 @@ public class LoginController {
 
 	@RequestMapping("/")
 	public String index(ModelMap model, Principal user) throws Exception {
+        model.addAttribute("user", user);
 		return "home";
 	}
 

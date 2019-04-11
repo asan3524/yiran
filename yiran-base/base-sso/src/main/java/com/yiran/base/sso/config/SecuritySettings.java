@@ -8,11 +8,14 @@ import org.springframework.context.annotation.Configuration;
 @RefreshScope
 public class SecuritySettings {
 
-	@Value("${security.oauth2.authorization.loginurl:/logout}")
-	private String logouturl;
+	@Value("${security.oauth2.authorization.loginurl:/login}")
+	private String loginurl;
 
 	@Value("${security.oauth2.authorization.deniedurl:/errors/403}")
 	private String deniedurl;
+
+	@Value("${security.oauth2.authorization.logouturl:/logout}")
+	private String logouturl;
 
 	@Value("${security.oauth2.authorization.matchers:/swagger-ui.html, /webjars/**, /swagger-resources/**, /v2/api-docs, /static/**}")
 	private String[] matchers;

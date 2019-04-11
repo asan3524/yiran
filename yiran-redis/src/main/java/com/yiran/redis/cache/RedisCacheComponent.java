@@ -37,7 +37,7 @@ public class RedisCacheComponent<T> implements DistributedCacheSupport<T> {
 		String v = objToJson(key, value);
 		BoundValueOperations<String, String> boundValueOperations = redisTemplate.boundValueOps(key);
 		boundValueOperations.expire(expiry, TimeUnit.SECONDS);
-		boundValueOperations.set(v, expiry);
+		boundValueOperations.set(v);
 	}
 
 	@Override

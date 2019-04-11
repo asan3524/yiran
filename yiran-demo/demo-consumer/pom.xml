@@ -46,7 +46,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.yiran.base</groupId>
-			<artifactId>base-resource</artifactId>
+			<artifactId>base-sso</artifactId>
 			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
