@@ -4,11 +4,12 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 
+	<groupId>com.yiran.base</groupId>
 	<artifactId>base-hystrix</artifactId>
-	<version>${yiran.hystrix.version}</version>
+	<version>0.0.1-SNAPSHOT</version>
 	
 	<parent>
-		<groupId>com.yiran.base</groupId>
+		<groupId>com.yiran</groupId>
 		<artifactId>yiran-base</artifactId>
 		<version>1.0.0</version>
 	</parent>

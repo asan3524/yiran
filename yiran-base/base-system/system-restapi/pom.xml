@@ -9,7 +9,7 @@
 	<parent>
 		<groupId>com.yiran.base</groupId>
 		<artifactId>base-system</artifactId>
-		<version>${yiran.system.version}</version>
+		<version>1.0.0</version>
 	</parent>
 
 	<name>system-restapi</name>
@@ -43,7 +43,7 @@
 		<dependency>
 			<groupId>com.yiran.base</groupId>
 			<artifactId>base-web</artifactId>
-			<version>${yiran.web.version}</version>
+			<version>0.0.1-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>com.yiran.base</groupId>
@@ -53,7 +53,7 @@
 		<dependency>
 			<groupId>com.yiran.base</groupId>
 			<artifactId>base-security</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>1.0.0</version>
 		</dependency>
 	</dependencies>
 

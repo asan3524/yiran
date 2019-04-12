@@ -4,11 +4,11 @@
 	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 	<modelVersion>4.0.0</modelVersion>
 
+	<groupId>com.yiran.base</groupId>
 	<artifactId>base-sso</artifactId>
-	<version>${yiran.sso.version}</version>
 
 	<parent>
-		<groupId>com.yiran.base</groupId>
+		<groupId>com.yiran</groupId>
 		<artifactId>yiran-base</artifactId>
 		<version>1.0.0</version>
 	</parent>
@@ -28,7 +28,7 @@
 		<dependency>
 			<groupId>com.yiran.base</groupId>
 			<artifactId>system-object</artifactId>
-			<version>${yiran.system.version}</version>
+			<version>1.0.0</version>
 		</dependency>
 		<dependency>
 			<groupId>com.yiran</groupId>
