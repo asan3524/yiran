@@ -23,7 +23,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.assertj.core.util.Lists;
+import com.google.common.collect.Lists;
 
 public class CommonUtils {
 
