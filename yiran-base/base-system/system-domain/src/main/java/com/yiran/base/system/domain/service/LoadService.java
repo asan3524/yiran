@@ -33,19 +33,13 @@ public class LoadService {
 	private UserRepository userRepository;
 
 	@Autowired
-	private RedisCacheComponent<User> userCacheComponent;
+	private RedisCacheComponent cacheComponent;
 
 	@Autowired
 	private RoleRepository roleRepository;
 
 	@Autowired
-	private RedisCacheComponent<Role> roleCacheComponent;
-
-	@Autowired
 	private ResourceRepository resourceRepository;
-
-	@Autowired
-	private RedisCacheComponent<Resource> resourceCacheComponent;
 
 	public BaseRespData loadUser() {
 		BaseRespData brd = new BaseRespData();
@@ -63,11 +57,11 @@ public class LoadService {
 					accountmap.put(user.getAccount(), user.getId());
 				}
 			}
-			userCacheComponent.delete(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID);
-			userCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, umap);
+			cacheComponent.delete(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID);
+			cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, umap);
 
-			userCacheComponent.delete(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ACCOUNT);
-			userCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ACCOUNT, accountmap);
+			cacheComponent.delete(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ACCOUNT);
+			cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ACCOUNT, accountmap);
 		}
 
 		brd.setCode(Code.SC_OK);
@@ -88,8 +82,8 @@ public class LoadService {
 					umap.put(role.getId().toString(), GsonUtil.dateGson().toJson(role));
 				}
 			}
-			roleCacheComponent.delete(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID);
-			roleCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, umap);
+			cacheComponent.delete(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID);
+			cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, umap);
 		}
 
 		brd.setCode(Code.SC_OK);
@@ -110,8 +104,8 @@ public class LoadService {
 					umap.put(resource.getId().toString(), GsonUtil.dateGson().toJson(resource));
 				}
 			}
-			resourceCacheComponent.delete(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID);
-			resourceCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, umap);
+			cacheComponent.delete(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID);
+			cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, umap);
 		}
 
 		brd.setCode(Code.SC_OK);

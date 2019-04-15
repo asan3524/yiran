@@ -14,6 +14,7 @@ import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 
 import com.yiran.base.authorization.builder.RedisClientDetailsServiceBuilder;
+import com.yiran.base.authorization.token.RedisAuthenticationCodeServices;
 
 @Configuration
 @EnableAuthorizationServer
@@ -35,6 +36,9 @@ public class AuthorizationSecurityConfigurer extends AuthorizationServerConfigur
 
 	@Autowired(required = false)
 	private RedisClientDetailsServiceBuilder redisClientDetailsServiceBuilder;
+
+	@Autowired(required = false)
+	private RedisAuthenticationCodeServices redisAuthenticationCodeServices;
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
@@ -62,7 +66,8 @@ public class AuthorizationSecurityConfigurer extends AuthorizationServerConfigur
 	public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
 		// TODO Auto-generated method stub
 		endpoints.tokenStore(tokenStore).accessTokenConverter(jwtAccessTokenConverter)
-				.authenticationManager(authenticationManager);
+				.authenticationManager(authenticationManager)
+				.authorizationCodeServices(redisAuthenticationCodeServices);
 	}
 
 }

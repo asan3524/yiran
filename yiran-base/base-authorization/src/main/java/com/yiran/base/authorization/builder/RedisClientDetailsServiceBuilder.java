@@ -21,7 +21,7 @@ public class RedisClientDetailsServiceBuilder extends ClientDetailsServiceBuilde
 	public static final String YIRAN_BASE_OAUTH2_CENTER_CLIENTDETAILS_ID = "YIRAN_BASE_OAUTH2_CENTER_CLIENTDETAILS_ID_";
 
 	@Autowired
-	private RedisCacheComponent<BaseClientDetails> cacheComponent;
+	private RedisCacheComponent cacheComponent;
 
 	@Override
 	protected void addClient(String clientId, ClientDetails value) {

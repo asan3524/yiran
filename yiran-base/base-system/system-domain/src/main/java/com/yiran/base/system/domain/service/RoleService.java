@@ -39,7 +39,7 @@ public class RoleService {
 	private RoleRepository roleRepository;
 
 	@Autowired
-	private RedisCacheComponent<Role> roleCacheComponent;
+	private RedisCacheComponent cacheComponent;
 
 	@Autowired
 	private ResourceService resourceService;
@@ -85,7 +85,7 @@ public class RoleService {
 		RoleInfo roleInfo = roleRepository.getOne(id);
 		if (CommonUtils.isNotNull(roleInfo)) {
 			// 删除缓存
-			roleCacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, roleInfo.getId());
+			cacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, roleInfo.getId());
 
 			roleRepository.cleanUserToRole(id);
 
@@ -149,7 +149,7 @@ public class RoleService {
 		Optional<RoleInfo> temp = roleRepository.findById(id);
 		if (temp.isPresent()) {
 			role = CopyUtil.copy(temp.get(), Role.class);
-			roleCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, role.getId(), role);
+			cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, role.getId(), role);
 
 			brd.setCode(Code.SC_OK);
 		} else {
@@ -162,7 +162,7 @@ public class RoleService {
 	public RespData<Role> get(String id) {
 		RespData<Role> rd = new RespData<Role>();
 
-		Role role = roleCacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, id, Role.class);
+		Role role = cacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, id, Role.class);
 
 		if (null != role) {
 			rd.setCode(Code.SC_OK);
@@ -171,7 +171,7 @@ public class RoleService {
 			Optional<RoleInfo> temp = roleRepository.findById(id);
 			if (temp.isPresent()) {
 				role = CopyUtil.copy(temp.get(), Role.class);
-				roleCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, role.getId(), role);
+				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_ROLE_ID, role.getId(), role);
 
 				rd.setCode(Code.SC_OK);
 				rd.setData(role);

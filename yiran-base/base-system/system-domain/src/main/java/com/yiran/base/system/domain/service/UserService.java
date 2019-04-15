@@ -42,10 +42,7 @@ public class UserService {
 	private RoleService roleService;
 
 	@Autowired
-	private RedisCacheComponent<User> userCacheComponent;
-
-	@Autowired
-	private RedisCacheComponent<String> cacheComponent;
+	private RedisCacheComponent cacheComponent;
 
 	public BaseRespData save(User user) {
 
@@ -89,7 +86,7 @@ public class UserService {
 		UserInfo userInfo = userRepository.getOne(id);
 		if (CommonUtils.isNotNull(userInfo)) {
 			// 删除缓存
-			userCacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, userInfo.getId());
+			cacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, userInfo.getId());
 			userRepository.deleteById(id);
 			brd.setCode(Code.SC_OK);
 		} else {
@@ -149,7 +146,7 @@ public class UserService {
 		Optional<UserInfo> temp = userRepository.findById(id);
 		if (temp.isPresent()) {
 			user = CopyUtil.copy(temp.get(), User.class);
-			userCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id, user);
+			cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id, user);
 
 			brd.setCode(Code.SC_OK);
 		} else {
@@ -161,7 +158,7 @@ public class UserService {
 
 	public RespData<User> get(String id) {
 		RespData<User> rd = new RespData<User>();
-		User user = userCacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id, User.class);
+		User user = cacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id, User.class);
 
 		if (null != user) {
 			rd.setCode(Code.SC_OK);
@@ -170,7 +167,7 @@ public class UserService {
 			Optional<UserInfo> temp = userRepository.findById(id);
 			if (temp.isPresent()) {
 				user = CopyUtil.copy(temp.get(), User.class);
-				userCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id, user);
+				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id, user);
 
 				rd.setCode(Code.SC_OK);
 				rd.setData(user);
@@ -191,7 +188,7 @@ public class UserService {
 		User user = null;
 
 		if (null != id) {
-			user = userCacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id, User.class);
+			user = cacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id, User.class);
 
 			if (null != user) {
 				if (user.getAccount().equals(account)) {
@@ -200,7 +197,7 @@ public class UserService {
 				} else {
 					user = null;
 					cacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ACCOUNT, account);
-					userCacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id);
+					cacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id);
 				}
 			}
 		}
@@ -214,7 +211,7 @@ public class UserService {
 			if (null != userInfo) {
 				user = CopyUtil.copy(user, User.class);
 
-				userCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, user.getId(), user);
+				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, user.getId(), user);
 
 				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ACCOUNT, user.getAccount(), user.getId());
 

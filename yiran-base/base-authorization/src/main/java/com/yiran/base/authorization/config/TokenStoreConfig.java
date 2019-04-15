@@ -11,9 +11,13 @@ import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
 @Configuration
 public class TokenStoreConfig {
 
+	// @Autowired
+	// private RedisCacheComponent redisCacheComponent;
+
 	@Bean
 	public TokenStore tokenStore() {
 		return new JwtTokenStore(jwtAccessTokenConverter());
+		// return new YiranRedisTokenStore(redisCacheComponent);
 	}
 
 	@Bean

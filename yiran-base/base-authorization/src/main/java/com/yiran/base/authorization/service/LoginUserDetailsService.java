@@ -17,10 +17,7 @@ public class LoginUserDetailsService implements UserDetailsService {
 
 
 	@Autowired
-	private RedisCacheComponent<String> cacheComponent;
-	
-	@Autowired
-	private RedisCacheComponent<User> userCacheComponent;
+	private RedisCacheComponent cacheComponent;
 
 	@Override
 	public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
@@ -29,7 +26,7 @@ public class LoginUserDetailsService implements UserDetailsService {
 		String id = cacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ACCOUNT, userName, String.class);
 		
 		if(null != id) {
-			user = userCacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id, User.class);
+			user = cacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_USER_ID, id, User.class);
 		}
 		
 		if (user == null) {

@@ -17,6 +17,7 @@ import javax.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.discovery.DiscoveryClient;
+import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.yiran.base.authorization.service.SecurityUser;
 import com.yiran.base.core.image.ImageCode;
 
 @Controller
@@ -44,8 +46,11 @@ public class LoginController {
 	}
 
 	@RequestMapping("/")
-	public String index(ModelMap model, Principal user) throws Exception {
-        model.addAttribute("user", user);
+	public String index(ModelMap model, Authentication authentication) throws Exception {
+		//session 使用redis存储的情况下获取不到SecurityUser
+		SecurityUser su = (SecurityUser) authentication.getPrincipal();
+		su.setPassword(null);
+        model.addAttribute("user", su);
 		return "home";
 	}
 

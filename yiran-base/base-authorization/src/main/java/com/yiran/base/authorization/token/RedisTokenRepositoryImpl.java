@@ -17,11 +17,7 @@ import com.yiran.redis.cache.RedisCacheComponent;
 public class RedisTokenRepositoryImpl implements PersistentTokenRepository {
 
 	@Autowired
-	private RedisCacheComponent<PersistentRememberMeToken> cacheComponent;
-
-	@SuppressWarnings("rawtypes")
-	@Autowired
-	private RedisCacheComponent<ArrayList> listComponent;
+	private RedisCacheComponent cacheComponent;
 
 	private Integer tokenValiditySeconds = 300;
 
@@ -42,7 +38,7 @@ public class RedisTokenRepositoryImpl implements PersistentTokenRepository {
 		cacheComponent.set(token.getSeries(), token, tokenValiditySeconds);
 
 		@SuppressWarnings("unchecked")
-		ArrayList<String> userTokens = listComponent.get(token.getUsername(), ArrayList.class);
+		ArrayList<String> userTokens = cacheComponent.get(token.getUsername(), ArrayList.class);
 
 		if (null != userTokens) {
 			userTokens.add(token.getSeries());
@@ -50,7 +46,7 @@ public class RedisTokenRepositoryImpl implements PersistentTokenRepository {
 			userTokens = new ArrayList<String>();
 			userTokens.add(token.getSeries());
 		}
-		listComponent.set(token.getUsername(), userTokens);
+		cacheComponent.set(token.getUsername(), userTokens);
 	}
 
 	@Override
@@ -74,15 +70,16 @@ public class RedisTokenRepositoryImpl implements PersistentTokenRepository {
 	@Override
 	public synchronized void removeUserTokens(String username) {
 		// TODO Auto-generated method stub
-		@SuppressWarnings("unchecked")
-		ArrayList<String> userTokens = listComponent.get(username, ArrayList.class);
+		if (null != username) {
+			@SuppressWarnings("unchecked")
+			ArrayList<String> userTokens = cacheComponent.get(username, ArrayList.class);
 
-		if (null != userTokens) {
+			if (null != userTokens) {
 
-			cacheComponent.delete(userTokens);
+				cacheComponent.delete(userTokens);
 
-			listComponent.delete(username);
+				cacheComponent.delete(username);
+			}
 		}
 	}
-
 }

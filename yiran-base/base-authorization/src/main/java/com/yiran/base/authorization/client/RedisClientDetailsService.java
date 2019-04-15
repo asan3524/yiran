@@ -11,9 +11,9 @@ import com.yiran.redis.cache.RedisCacheComponent;
 
 public class RedisClientDetailsService implements ClientDetailsService {
 
-	private RedisCacheComponent<BaseClientDetails> cacheComponent;
+	private RedisCacheComponent cacheComponent;
 
-	public RedisClientDetailsService(RedisCacheComponent<BaseClientDetails> cacheComponent) {
+	public RedisClientDetailsService(RedisCacheComponent cacheComponent) {
 		// TODO Auto-generated constructor stub
 		this.cacheComponent = cacheComponent;
 	}

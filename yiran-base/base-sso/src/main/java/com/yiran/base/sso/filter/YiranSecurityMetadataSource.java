@@ -33,7 +33,7 @@ public class YiranSecurityMetadataSource implements FilterInvocationSecurityMeta
 	private SecuritySettings configProperties;
 
 	@Autowired
-	private RedisCacheComponent<Role> cacheComponent;
+	private RedisCacheComponent cacheComponent;
 
 	private PathMatcher pathMatcher = new AntPathMatcher();
 

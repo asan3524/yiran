@@ -35,7 +35,7 @@ public class ResourceService {
 	@Autowired
 	private ResourceRepository resourceRepository;
 	@Autowired
-	private RedisCacheComponent<Resource> resourceCacheComponent;
+	private RedisCacheComponent cacheComponent;
 
 	public BaseRespData save(Resource resource) {
 
@@ -56,7 +56,7 @@ public class ResourceService {
 		ResourceInfo resourceInfo = resourceRepository.getOne(id);
 		if (CommonUtils.isNotNull(resourceInfo)) {
 			// 删除缓存
-			resourceCacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, resourceInfo.getId());
+			cacheComponent.hashDelete(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, resourceInfo.getId());
 
 			resourceRepository.cleanRoleToResource(id);
 
@@ -98,7 +98,7 @@ public class ResourceService {
 		Optional<ResourceInfo> temp = resourceRepository.findById(id);
 		if (temp.isPresent()) {
 			resource = CopyUtil.copy(temp.get(), Resource.class);
-			resourceCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, resource.getId(), resource);
+			cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, resource.getId(), resource);
 
 			brd.setCode(Code.SC_OK);
 		} else {
@@ -110,7 +110,7 @@ public class ResourceService {
 
 	public RespData<Resource> get(String id) {
 		RespData<Resource> rd = new RespData<Resource>();
-		Resource resource = resourceCacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, id,
+		Resource resource = cacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, id,
 				Resource.class);
 
 		if (null != resource) {
@@ -120,7 +120,7 @@ public class ResourceService {
 			Optional<ResourceInfo> temp = resourceRepository.findById(id);
 			if (temp.isPresent()) {
 				resource = CopyUtil.copy(temp.get(), Resource.class);
-				resourceCacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, resource.getId(),
+				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, resource.getId(),
 						resource);
 
 				rd.setCode(Code.SC_OK);
