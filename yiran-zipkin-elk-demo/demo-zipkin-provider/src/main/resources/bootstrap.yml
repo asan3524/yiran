@@ -1,0 +1,67 @@
+#单机配置
+---
+server: 
+  port: 10001
+  servlet:
+    context-path: / 
+spring: 
+  application: 
+    name: user-provider
+  profiles:
+    active: develop
+  sleuth: 
+    feign: 
+      enabled: true
+    sampler: 
+      probability: 1.0
+    web: 
+      client: 
+        enabled: true
+  zipkin: 
+    enabled: true
+    # 目前还未部署到k8s
+    base-url: http://192.168.80.81:9411/
+    service: 
+      name: ${spring.application.name}
+    sender: 
+      type: web   
+eureka:
+  instance:
+#    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+#    prefer-ip-address: true  
+    status-page-url: http://${spring.cloud.client.ip-address}:${server.port}/swagger-ui.html 
+  client:
+    service-url:
+      defaultZone: http://127.0.0.1:${server.port}/eureka/
+    register-with-eureka: true
+  server:
+    enable-self-preservation: false
+feign: 
+  hystrix: 
+    enabled: true
+hystrix: 
+  command: 
+    default:
+      execution:
+        isolation:
+          thread:
+            timeoutInMilliseconds: 3000
+  metrics: 
+    enabled: true
+user-provider: 
+  ribbon:
+    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
+management: 
+  endpoints: 
+    web: 
+      exposure: 
+        include: hystrix.stream, health, info
+#security: 
+#  basic: 
+#    enabled: false
+logging: 
+  level: 
+    root: info
+    org.springframework.cloud.sleuth: debug
+    org.springframework.web.servlet.DispatcherServlet: debug
+    org.springframework.cloud.openfeign: debug

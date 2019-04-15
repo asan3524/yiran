@@ -1,0 +1,35 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<parent>
+		<groupId>com.yiran</groupId>
+		<artifactId>yiran-parent</artifactId>
+		<version>1.0.0</version>
+	</parent>
+	
+	<artifactId>yiran-zipkin-elk-demo</artifactId>
+	<packaging>pom</packaging>
+	
+	
+	<modules>
+		<module>demo-zipkin-consumer</module>
+		<module>demo-zipkin-provider</module>
+		<module>demo-zipkin-provider-client</module>
+		<module>demo-zipkin-provider-common</module>
+	</modules>
+	
+	<properties>
+		<base-web.version>0.0.1-SNAPSHOT</base-web.version>
+	</properties>
+	
+	<dependencyManagement>
+		<dependencies>
+			<dependency>
+				<groupId>com.yiran.base</groupId>
+				<artifactId>base-web</artifactId>
+				<version>${base-web.version}</version>
+			</dependency>
+		</dependencies>
+	</dependencyManagement>
+</project>
