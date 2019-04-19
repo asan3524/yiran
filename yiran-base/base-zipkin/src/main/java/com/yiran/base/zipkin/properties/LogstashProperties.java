@@ -2,7 +2,7 @@ package com.yiran.base.zipkin.properties;
 
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
-@ConfigurationProperties(prefix = "logstash", ignoreUnknownFields = true)
+@ConfigurationProperties(prefix = "logstash", ignoreUnknownFields = false)
 public class LogstashProperties {
 
 	private LogstashTcpProperties tcp;
@@ -32,11 +32,4 @@ public class LogstashProperties {
 	public void setUdp(LogstashUdpProperties udp) {
 		this.udp = udp;
 	}
-
-	@Override
-	public String toString() {
-		return "LogstashProperties [tcp=" + tcp + ", udp=" + udp.toString() + ", writeBufferSize=" + writeBufferSize
-				+ "]";
-	}
-
 }
