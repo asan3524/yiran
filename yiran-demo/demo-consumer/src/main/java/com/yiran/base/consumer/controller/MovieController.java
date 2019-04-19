@@ -18,13 +18,12 @@ import io.swagger.annotations.ApiOperation;
 public class MovieController {
 
 	@Autowired
-	private UserFeignClient userFeignClient;
+	private UserFeignClient userFeignClient1;
 
 	@GetMapping("/{id}")
 	@ApiOperation(value = "获取用户", notes = "根据用户ID，获取用户详情")
-	public UserInfo findById(@PathVariable Long id) {
-		System.out.println("==========================================");
-		UserInfo user = userFeignClient.findById(id);
+	public UserInfo postId(@PathVariable Long id) {
+		UserInfo user = userFeignClient1.findById(id);
 		return user;
 	}
 }

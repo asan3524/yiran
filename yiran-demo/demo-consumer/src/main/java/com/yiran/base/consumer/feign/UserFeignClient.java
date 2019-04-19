@@ -7,9 +7,7 @@ import org.springframework.web.bind.annotation.RequestMethod;
 
 import com.yiran.base.consumer.bean.UserInfo;
 
-
-
-@FeignClient(name = "yiran-demo-provider",  fallbackFactory = UserFeignClientFallBackFactory.class)
+@FeignClient(name = "yiran-demo-provider", fallbackFactory = UserFeignClientFallBackFactory.class)
 public interface UserFeignClient {
 
 	@RequestMapping(value = "/user/{id}", method = RequestMethod.GET)
