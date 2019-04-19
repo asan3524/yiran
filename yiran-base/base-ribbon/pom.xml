@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+<project
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd"
+	xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+	<modelVersion>4.0.0</modelVersion>
+
+	<groupId>com.yiran.base</groupId>
+	<artifactId>base-ribbon</artifactId>
+	<version>0.0.1-SNAPSHOT</version>
+
+	<parent>
+		<groupId>com.yiran</groupId>
+		<artifactId>yiran-base</artifactId>
+		<version>1.0.0</version>
+	</parent>
+
+	<name>base-ribbon</name>
+	<description>base-ribbon</description>
+
+	<dependencies>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-openfeign</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-netflix-ribbon</artifactId>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.tomcat.embed</groupId>
+  			<artifactId>tomcat-embed-core</artifactId>
+  			<scope>compile</scope>
+		</dependency>
+		<dependency>
+			<groupId>com.yiran.base</groupId>
+			<artifactId>base-core</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+		<dependency>
+			<groupId>com.yiran</groupId>
+			<artifactId>yiran-redis</artifactId>
+			<version>${yiran.redis.version}</version>
+		</dependency>
+	</dependencies>
+</project>
