@@ -18,7 +18,7 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+			<artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
 		</dependency>
 		<dependency>
 			<groupId>org.springframework.cloud</groupId>
@@ -47,7 +47,12 @@
 		</dependency>
 		<dependency>
 			<groupId>com.yiran.base</groupId>
-			<artifactId>base-sso</artifactId>
+			<artifactId>base-feign</artifactId>
+			<version>1.0.0</version>
+		</dependency>
+		<dependency>
+			<groupId>com.yiran.base</groupId>
+			<artifactId>base-resource</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>
