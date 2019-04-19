@@ -1,14 +1,5 @@
 package com.yiran.base.core.data;
 
-public class BaseReqData {
+public class BaseReqData extends BaseData {
 
-	protected String transaction;
-
-	public String getTransaction() {
-		return transaction;
-	}
-
-	public void setTransaction(String transaction) {
-		this.transaction = transaction;
-	}
 }

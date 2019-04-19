@@ -3,25 +3,15 @@ package com.yiran.base.core.data;
 import java.util.Calendar;
 import java.util.Date;
 
-public class BaseRespData {
-
+public class BaseRespData extends BaseData {
 	public BaseRespData() {
 		// TODO Auto-generated constructor stub
 		this.timestamp = Calendar.getInstance().getTime();
 	}
 
-	protected String transaction;
 	protected int code;
 	protected String message;
 	protected Date timestamp;
-
-	public String getTransaction() {
-		return transaction;
-	}
-
-	public void setTransaction(String transaction) {
-		this.transaction = transaction;
-	}
 
 	public int getCode() {
 		return code;
