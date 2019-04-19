@@ -37,8 +37,9 @@ public class RedisCacheComponent implements DistributedCacheSupport {
 		// TODO Auto-generated method stub
 		String v = objToJson(key, value);
 		BoundValueOperations<String, String> boundValueOperations = redisTemplate.boundValueOps(key);
-		boundValueOperations.expire(expiry, TimeUnit.SECONDS);
 		boundValueOperations.set(v);
+		//设置值之后再增加时间
+		boundValueOperations.expire(expiry, TimeUnit.SECONDS);
 	}
 
 	@Override
@@ -62,10 +63,11 @@ public class RedisCacheComponent implements DistributedCacheSupport {
 		checkRedisKey(key);
 		String v = objToJson(hashKey, hashValue);
 		BoundHashOperations<String, String, String> boundHashOperations = redisTemplate.boundHashOps(key);
-		boundHashOperations.expire(expiry, TimeUnit.SECONDS);
 		boundHashOperations.put(hashKey, v);
+		//设置值之后再增加时间， 整个hash生效
+		boundHashOperations.expire(expiry, TimeUnit.SECONDS);
 	}
-
+	
 	@Override
 	public void hashPut(String key, Map<String, String> values) {
 		// TODO Auto-generated method stub
@@ -73,14 +75,15 @@ public class RedisCacheComponent implements DistributedCacheSupport {
 		BoundHashOperations<String, String, String> boundHashOperations = redisTemplate.boundHashOps(key);
 		boundHashOperations.putAll(values);
 	}
-
+	
 	@Override
 	public void hashPut(String key, Map<String, String> values, Integer expiry) {
 		// TODO Auto-generated method stub
 		checkRedisKey(key);
 		BoundHashOperations<String, String, String> boundHashOperations = redisTemplate.boundHashOps(key);
-		boundHashOperations.expire(expiry, TimeUnit.SECONDS);
 		boundHashOperations.putAll(values);
+		//设置值之后再增加时间， 整个hash生效
+		boundHashOperations.expire(expiry, TimeUnit.SECONDS);
 	}
 
 	@Override
@@ -162,62 +165,6 @@ public class RedisCacheComponent implements DistributedCacheSupport {
 		}
 	}
 
-	// private T jsonToObj(final String value, Class<T> clazz) {
-	// if (value == null) {
-	// return null;
-	// }
-	// try {
-	// return JSON.parseObject(value, clazz);
-	// } catch (JSONException e) {
-	// return null;
-	// }
-	// }
-
-	private <T> T jsonToObj(final String value, Class<T> clazz) {
-		if (value == null) {
-			return null;
-		}
-		return new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().fromJson(value, clazz);
-	}
-
-	private <T> String objToJson(final String key, final T value) {
-		checkRedisKey(key);
-		if (value == null) {
-			throw new RedisException("value is null!");
-		}
-		String stringValue = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(value);
-		if (StringUtils.isEmpty(stringValue)) {
-			throw new RedisException("value to json is null!");
-		}
-		return stringValue;
-	}
-
-	// private String objToJson(final String key, final T value) {
-	// checkRedisKey(key);
-	// if (value == null) {
-	// throw new RedisException("value is null!");
-	// }
-	// String stringValue = null;
-	// try {
-	// stringValue = JSON.toJSONString(value, true);
-	// } catch (JSONException e) {
-	// throw new RedisException("value toJSONString exception!");
-	// }
-	// if (StringUtils.isEmpty(stringValue)) {
-	// throw new RedisException("value to json is null!");
-	// }
-	// return stringValue;
-	// }
-
-	private void checkRedisKey(final String key) {
-		if (StringUtils.isEmpty(key)) {
-			throw new RedisException("key is null!");
-		}
-		if (key.length() > 1000000L) {
-			throw new RedisException("length of key greater than 1M!");
-		}
-	}
-
 	@Override
 	public <T> void listSet(String key, Integer index, T listValue) {
 		// TODO Auto-generated method stub
@@ -233,10 +180,11 @@ public class RedisCacheComponent implements DistributedCacheSupport {
 		checkRedisKey(key);
 		String v = objToJson(key, listValue);
 		BoundListOperations<String, String> boundListOperations = redisTemplate.boundListOps(key);
-		boundListOperations.expire(expiry, TimeUnit.SECONDS);
 		boundListOperations.set(index, v);
+		//设置值之后再增加时间， 整个list生效
+		boundListOperations.expire(expiry, TimeUnit.SECONDS);
 	}
-
+	
 	@Override
 	public <T> void listPush(String key, T listValue) {
 		// TODO Auto-generated method stub
@@ -252,10 +200,11 @@ public class RedisCacheComponent implements DistributedCacheSupport {
 		checkRedisKey(key);
 		String v = objToJson(key, listValue);
 		BoundListOperations<String, String> boundListOperations = redisTemplate.boundListOps(key);
-		boundListOperations.expire(expiry, TimeUnit.SECONDS);
 		boundListOperations.leftPush(v);
+		//设置值之后再增加时间， 整个list生效
+		boundListOperations.expire(expiry, TimeUnit.SECONDS);
 	}
-
+	
 	@Override
 	public <T> T listLeftPop(String key, Class<T> clazz) {
 		// TODO Auto-generated method stub
@@ -317,5 +266,33 @@ public class RedisCacheComponent implements DistributedCacheSupport {
 			return null == result ? 0 : result;
 		}
 		return 0;
+	}
+	
+	private <T> T jsonToObj(final String value, Class<T> clazz) {
+		if (value == null) {
+			return null;
+		}
+		return new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().fromJson(value, clazz);
+	}
+
+	private <T> String objToJson(final String key, final T value) {
+		checkRedisKey(key);
+		if (value == null) {
+			throw new RedisException("value is null!");
+		}
+		String stringValue = new GsonBuilder().setDateFormat("yyyy-MM-dd HH:mm:ss").create().toJson(value);
+		if (StringUtils.isEmpty(stringValue)) {
+			throw new RedisException("value to json is null!");
+		}
+		return stringValue;
+	}
+
+	private void checkRedisKey(final String key) {
+		if (StringUtils.isEmpty(key)) {
+			throw new RedisException("key is null!");
+		}
+		if (key.length() > 1000000L) {
+			throw new RedisException("length of key greater than 1M!");
+		}
 	}
 }
