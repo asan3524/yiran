@@ -5,9 +5,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
 import com.yiran.base.system.object.Resource;
-import com.yiran.base.system.object.Role;
 import com.yiran.base.system.qo.ResourceQo;
-import com.yiran.base.system.qo.RoleQo;
 
 import feign.hystrix.FallbackFactory;
 
@@ -50,10 +48,6 @@ public class ResourceFeignClientFallBackFactory implements FallbackFactory<Resou
 				// TODO Auto-generated method stub
 				return null;
 			}
-
-
-		
-
 		};
 	}
 }
