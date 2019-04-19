@@ -3,10 +3,12 @@
 <configuration>
     <include resource="org/springframework/boot/logging/logback/defaults.xml" />
 
-    <springProperty scope="context" name="springAppName" source="spring.application.name" />
+    <springProperty scope="context" name="applicationName" source="spring.application.name" />
+    <springProperty scope="context" name="logstashDest" source="logstash.tcp.destination" />
+    <springProperty scope="context" name="queueSize" source="logstash.queue-size" />
 
     <!-- 日志在工程中的输出位置 -->
-    <property name="LOG_FILE" value="${BUILD_FOLDER:-build}/${springAppName}" />
+    <property name="LOG_FILE" value="${BUILD_FOLDER:-build}/${applicationName}" />
 
     <!-- 控制台的日志输出样式 -->
     <property name="CONSOLE_LOG_PATTERN"
@@ -26,9 +28,8 @@
 
     <!-- 为logstash输出的JSON格式的Appender -->
     <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>127.0.0.1:9250</destination><!--192.168.80.81:9250-->
-        <queueSize>1048576</queueSize>
-        <writeBufferSize>1048576</writeBufferSize>
+        <destination>${logstashDest}</destination><!-- 127.0.0.1:9250 -->
+        <writeBufferSize>16384</writeBufferSize>
         <!-- 日志输出编码 -->
         <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
@@ -39,7 +40,7 @@
                     <pattern>
                         {
                         "severity": "%level",
-                        "service": "${springAppName:-}",
+                        "service": "${applicationName:-}",
                         "trace": "%X{X-B3-TraceId:-}",
                         "span": "%X{X-B3-SpanId:-}",
                         "exportable": "%X{X-Span-Export:-}",

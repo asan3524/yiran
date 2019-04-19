@@ -2,8 +2,8 @@ package com.yiran.base.zipkin.properties;
 
 public class LogstashUdpProperties {
 
-	private String ip;
-	private Integer port;
+	private String ip = "localhost";
+	private Integer port = 9250;
 
 	public String getIp() {
 		return ip;
@@ -20,10 +20,4 @@ public class LogstashUdpProperties {
 	public void setPort(Integer port) {
 		this.port = port;
 	}
-
-	@Override
-	public String toString() {
-		return "LogstashUdpProperties [ip=" + ip + ", port=" + port + "]";
-	}
-
 }

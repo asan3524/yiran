@@ -7,7 +7,7 @@
     <springProperty scope="context" name="logstashDest" source="logstash.tcp.destination" />
     <springProperty scope="context" name="queueSize" source="logstash.queue-size" />
 
-    <!-- 日志在工程中的输出位置 -->
+    <!-- 日志在工程中的输出位置, 最好不要是相对路径, 此处用于演示 -->
     <property name="LOG_FILE" value="${BUILD_FOLDER:-build}/${applicationName}" />
 
     <!-- 控制台的日志输出样式 -->
@@ -27,11 +27,18 @@
     </appender>
 
     <!-- 为logstash输出的JSON格式的Appender -->
-    <appender name="logstash" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
-        <destination>${applicationName}</destination><!-- 127.0.0.1:9250 -->
-        <writeBufferSize>16384</writeBufferSize>
+    <appender name="logstash"
+              class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_FILE}.json</file>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <!--日志文件输出的文件名 -->
+            <fileNamePattern>${LOG_FILE}.json.%d{yyyy-MM-dd}.gz</fileNamePattern>
+            <!--日志文件保留天数 -->
+            <MaxHistory>3</MaxHistory>
+        </rollingPolicy>
         <!-- 日志输出编码 -->
-        <encoder class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
+        <encoder
+                class="net.logstash.logback.encoder.LoggingEventCompositeJsonEncoder">
             <providers>
                 <timestamp>
                     <timeZone>UTC+8</timeZone>
