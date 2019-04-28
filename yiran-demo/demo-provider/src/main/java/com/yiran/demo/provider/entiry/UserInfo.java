@@ -11,7 +11,7 @@ import javax.persistence.Id;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 @Entity
-@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
+//@JsonIgnoreProperties(value = { "hibernateLazyInitializer", "handler" })
 public class UserInfo {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

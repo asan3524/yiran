@@ -6,8 +6,9 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.yiran.base.consumer.bean.UserInfo;
-import com.yiran.base.consumer.feign.UserFeignClient;
+import com.yiran.base.consumer.feign.UserRestService;
+import com.yiran.base.consumer.object.User;
+import com.yiran.base.core.data.RespData;
 
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -18,12 +19,11 @@ import io.swagger.annotations.ApiOperation;
 public class MovieController {
 
 	@Autowired
-	private UserFeignClient userFeignClient1;
+	private UserRestService userRestService;
 
 	@GetMapping("/{id}")
 	@ApiOperation(value = "获取用户", notes = "根据用户ID，获取用户详情")
-	public UserInfo postId(@PathVariable Long id) {
-		UserInfo user = userFeignClient1.findById(id);
-		return user;
+	public RespData<User> postId(@PathVariable Long id) {
+		return userRestService.get(id);
 	}
 }
