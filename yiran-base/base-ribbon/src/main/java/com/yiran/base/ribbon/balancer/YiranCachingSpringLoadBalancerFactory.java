@@ -40,31 +40,37 @@ public class YiranCachingSpringLoadBalancerFactory extends CachingSpringLoadBala
 
 		if (client != null) {
 			if (client instanceof YiranFeignLoadBalancer) {
-				if (((YiranFeignLoadBalancer) client).getKey().equals(key)) {
-					return client;
-				} else {
-					((YiranFeignLoadBalancer) client).setKey(key);
-					this.cache.put(clientName, client);
-				}
+				YiranFeignLoadBalancer yflb = (YiranFeignLoadBalancer) client;
+				yflb.setKey(key);
+				return yflb;
+			} else if (client instanceof YiranRetryableFeignLoadBalancer) {
+				YiranRetryableFeignLoadBalancer yrflb = (YiranRetryableFeignLoadBalancer) client;
+				yrflb.setKey(key);
+				return yrflb;
 			} else {
 				return client;
 			}
-		}
-
-		if (loadBalancedRetryFactory != null) {
-			return super.create(clientName);
 		}
 
 		IClientConfig config = this.factory.getClientConfig(clientName);
 		ILoadBalancer lb = this.factory.getLoadBalancer(clientName);
 		ServerIntrospector serverIntrospector = this.factory.getInstance(clientName, ServerIntrospector.class);
 
-		YiranFeignLoadBalancer yiranFeignLoadBalancer = new YiranFeignLoadBalancer(lb, config, serverIntrospector);
-		yiranFeignLoadBalancer.setKey(key);
+		if (loadBalancedRetryFactory == null) {
+			YiranFeignLoadBalancer yflb = new YiranFeignLoadBalancer(lb, config, serverIntrospector);
 
-		this.cache.put(clientName, client);
+			this.cache.put(clientName, yflb);
 
-		return (FeignLoadBalancer) yiranFeignLoadBalancer;
+			yflb.setKey(key);
+			return yflb;
+		} else {
+			YiranRetryableFeignLoadBalancer yrflb = new YiranRetryableFeignLoadBalancer(lb, config, serverIntrospector,
+					loadBalancedRetryFactory);
+			this.cache.put(clientName, yrflb);
+
+			yrflb.setKey(key);
+			return yrflb;
+		}
 	}
 
 	public Object getKey() {

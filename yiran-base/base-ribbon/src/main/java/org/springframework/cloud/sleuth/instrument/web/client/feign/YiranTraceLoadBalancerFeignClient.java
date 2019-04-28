@@ -1,4 +1,4 @@
-package com.yiran.base.ribbon.balancer;
+package org.springframework.cloud.sleuth.instrument.web.client.feign;
 
 import java.io.IOException;
 import java.net.URI;
@@ -7,29 +7,32 @@ import java.util.Map;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.BeanFactory;
 import org.springframework.cloud.netflix.ribbon.SpringClientFactory;
-import org.springframework.cloud.openfeign.ribbon.LoadBalancerFeignClient;
 
 import com.netflix.loadbalancer.Server;
 import com.yiran.base.core.data.Transaction;
+import com.yiran.base.ribbon.balancer.YiranCachingSpringLoadBalancerFactory;
 import com.yiran.redis.cache.RedisCacheComponent;
 
 import feign.Client;
 import feign.Request;
 import feign.Response;
 
-public class YiranLoadBalancerFeignClient extends LoadBalancerFeignClient {
+public class YiranTraceLoadBalancerFeignClient extends TraceLoadBalancerFeignClient {
 
 	public static final String YIRAN_BASE_RIBBON_STATUS_TRANSACTIONA_ID = "YIRAN_BASE_RIBBON_STATUS_TRANSACTIONA_ID_";
-	private static final Logger Logger = LoggerFactory.getLogger(YiranLoadBalancerFeignClient.class);
+	private static final Logger Logger = LoggerFactory.getLogger(YiranTraceLoadBalancerFeignClient.class);
 
 	private YiranCachingSpringLoadBalancerFactory lbClientFactory;
 	private RedisCacheComponent cacheComponent;
 	private String myserviceid;
 
-	public YiranLoadBalancerFeignClient(Client delegate, YiranCachingSpringLoadBalancerFactory lbClientFactory,
-			SpringClientFactory clientFactory, RedisCacheComponent cacheComponent, String serviceid) {
-		super(delegate, lbClientFactory, clientFactory);
+	public YiranTraceLoadBalancerFeignClient(Client delegate, YiranCachingSpringLoadBalancerFactory lbClientFactory,
+			SpringClientFactory clientFactory, BeanFactory beanFactory, RedisCacheComponent cacheComponent,
+			String serviceid) {
+		super((Client) new TraceFeignObjectWrapper(beanFactory).wrap(delegate), lbClientFactory, clientFactory,
+				beanFactory);
 		this.lbClientFactory = lbClientFactory;
 		this.cacheComponent = cacheComponent;
 		this.myserviceid = serviceid;
@@ -98,7 +101,7 @@ public class YiranLoadBalancerFeignClient extends LoadBalancerFeignClient {
 					if (null != validitys && !validitys.isEmpty()) {
 						String validity = validitys.iterator().next();
 
-						try {	
+						try {
 							Integer vs = Integer.parseInt(validity);
 
 							// 如果响应中有transaction信息，则记录当前transaction与server信息到redis
