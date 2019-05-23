@@ -1,0 +1,19 @@
+spring:
+  application:
+    name: zuul-gateway
+zuul:
+  routes:
+    #自定义路由规则, 是一个map, key可以随意写, 通过 /application/routes 接口可以看到所有路由规则
+    user-consumer: 
+      #自定义的路由url
+      path: /consumer/**
+      #路由目的地服务名
+      serviceId: user-consumer
+      #zuul默认禁止三个敏感Header信息往内部服务传递["Cookie", "Set-Cookie", "Authorization"], 设置黑名单为空即可
+      sensitiveHeaders: 
+  #所有服务忽略敏感头
+  sensitive-headers:
+
+#  ignored-patterns: #禁止外部调用
+#     - /consumer/**  #或者通配符 /**/product/list
+

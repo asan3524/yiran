@@ -17,6 +17,7 @@
 		<module>demo-zipkin-provider</module>
 		<module>demo-zipkin-provider-client</module>
 		<module>demo-zipkin-provider-common</module>
+		<module>demo-zipkin-gateway</module>
 	</modules>
 	
 	<properties>
