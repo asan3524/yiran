@@ -12,7 +12,6 @@
     - [base-config](#base-config)
     - [base-eureka](#base-eureka)
     - [base-turbine](#base-turbine)
-    - [base-zipkin](#base-zipkin)
     - [base-authorization](#base-authorization)
     - [base-system](#base-system)
     - [base-core](#base-core)
@@ -20,6 +19,10 @@
     - [base-security](#base-security)
     - [base-resource](#base-resource)
     - [base-sso](#base-sso)
+    - [base-hystrix](#base-hystrix)
+    - [base-feign](#base-feign)
+    - [base-ribbon](#base-ribbon)
+    - [base-zipkin](#base-zipkin)
 
 ## 概述
 
@@ -76,9 +79,6 @@
     -   监控面板访问地址/hystrix
     -   聚合流访问地址/turbine.stream
 
----
-#### base-zipkin
-
 
 ---
 #### base-authorization
@@ -112,22 +112,86 @@ security:
 #### base-system
 -   **Version: V.1.0.0**
 -   **Features:**
+    -   默认端口为8080
     -   系统管理微服务，提供用户、角色、权限管理等能力
-    -   为base-oauth2提供登录验证
-    -   为base-security提供角色检索
-
+    -   对外提供标准的SDK访问（system-client）
+    -   SDK基于feign+histrix
 
 ---
 #### base-core    
+-   **Version: 0.0.1-SNAPSHOT**
+-   **Features:**
+    -   基础工具类
+    -   基础对象定义
+
 
 ---
-#### base-web  
+#### base-web    
+-   **Version: 0.0.1-SNAPSHOT**
+-   **Features:**
+    -   基础web服务包，基于spring-starter-web
+    -   定义基础controller层
+
 
 ---
 #### base-security  
+-   **Version: V.1.0.0**
+-   **Features:**
+    -   基础包，抽象微服务保护的入口
+    -   为微服务引入@EnableResourceServer
+    -   引入此包的微服务对外暴露的能力必须进行令牌校验
+    -   与base-resource base-sso互斥
+    -   适合最底层服务，只需要校验令牌的情况
+
 
 ---
 #### base-resource  
+-   **Version: V.1.0.0**
+-   **Features:**
+    -   基础包，抽象微服务保护的入口
+    -   为微服务引入@EnableResourceServer
+    -   自定义YiranSecurityInterceptor过滤器，根据配置及权限数据校验令牌及资源权限
+    -   与base-resource base-sso互斥
+    -   权限数据使用redis作为分布式缓存，后续考虑引入持久化
+
 
 ---
 #### base-sso  
+-   **Version: V.1.0.0**
+-   **Features:**
+    -   基础包，抽象微服务保护的入口，要求服务请求者进行登录，未登录将重定向到鉴权服务
+    -   为微服务引入@EnableOAuth2Sso
+    -   自定义YiranSecurityInterceptor过滤器，根据配置及权限数据校验令牌及资源权限
+    -   与base-resource base-sso互斥
+    -   权限数据使用redis作为分布式缓存，后续考虑引入持久化
+    -   借助spring-security进行安全过滤，防止crsf攻击等
+    -   一般用于网关服务
+
+
+---
+#### base-hystrix
+-   **Version: 0.0.1-SNAPSHOT**
+-   **Features:**
+    -   自定义熔断器跨线程调用时header信息copy传递
+
+
+---
+#### base-feign
+-   **Version: 1.0.0**
+-   **Features:**
+    -   feign基础包，copy OAuth2ClientContext到feign上下文
+
+
+---
+#### base-ribbon
+-   **Version: 0.0.1-SNAPSHOT**
+-   **Features:**
+    -   自定义有状态服务调用，在head中增加并解析transaction
+    -   自定义负载均衡策略，在transaction存在时根据事务寻址
+    -   sleuth链路跟踪使用TraceLoadBalancerFeignClient 
+    而一般情况下feign使用LoadBalancerFeignClient，因此需要进行差异化处理
+    来保证在使用sleuth情况下有状态服务调用依旧有效
+
+
+---
+#### base-zipkin
