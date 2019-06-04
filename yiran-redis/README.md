@@ -19,11 +19,10 @@
 
     - Standalone：必须配置spring.redis.host
     - Cluster：必须配置spring.redis.cluster.nodes
-    - Sentinel：必须配置xxx
+    - Sentinel：待实现
  
  - 序列化：
-    - key使用StringRedisSerializer序列化
-    - value使用Jackson2JsonRedisSerializer序列化，并借助alibaba fastjson
+    - key/value均使用StringRedisSerializer序列化，value由外部序列化成json进行缓存，方便不同语言共享访问
 
  - 对外接口
     - RedisCacheComponent 分布式缓存接口实现
@@ -32,6 +31,10 @@
         - KList
         - KSet
     - RedisLockComponent 分布式锁接口实现
+        - lock
+        - unlock
+        - trylock
+    lock基于Redisson实现，开关配置为spring.redis.redisson=true/false(默认)
 
 ---
 
@@ -44,6 +47,7 @@
 - RedisCacheComponent
     - KV
     - KHash
+    - KList
 
 ---
 ## 依赖
