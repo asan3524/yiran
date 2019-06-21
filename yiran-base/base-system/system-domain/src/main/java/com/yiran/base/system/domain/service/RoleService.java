@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.yiran.base.core.code.Code;
 import com.yiran.base.core.data.BaseRespData;
+import com.yiran.base.core.data.PageData;
 import com.yiran.base.core.data.PageRequestData;
 import com.yiran.base.core.data.PageResponseData;
 import com.yiran.base.core.data.RespData;
@@ -107,7 +108,7 @@ public class RoleService {
 
 		if (Code.SC_OK == rd.getCode() && null != rd.getData()) {
 			role = Role.copy(rd.getData(), role);
-		}else {
+		} else {
 			brd.setCode(Code.SC_BAD_REQUEST);
 			brd.setMessage("update role that is not exist");
 			return brd;
@@ -183,7 +184,7 @@ public class RoleService {
 		return rd;
 	}
 
-	public PageResponseData<List<Role>> findAll(PageRequestData<RoleQo> pageRequest) {
+	public PageResponseData<PageData<Role>> findAll(PageRequestData<RoleQo> pageRequest) {
 
 		Page<RoleInfo> result = roleRepository.findAll(new Specification<RoleInfo>() {
 			private static final long serialVersionUID = 1L;
@@ -203,12 +204,16 @@ public class RoleService {
 			}
 		}, pageRequest.getPageable());
 
-		PageResponseData<List<Role>> users = new PageResponseData<List<Role>>(pageRequest);
+		PageResponseData<PageData<Role>> users = new PageResponseData<PageData<Role>>(pageRequest);
 
-		users.setTotal(result.getTotalElements());
-		users.setNumber(result.getNumberOfElements());
-		users.setData(CopyUtil.copyList(result.getContent(), Role.class));
+		PageData<Role> page = new PageData<Role>();
+		page.setPage(pageRequest.getPageable().getPageNumber());
+		page.setSize(pageRequest.getPageable().getPageSize());
+		page.setTotal(result.getTotalElements());
+		page.setNumber(result.getNumberOfElements());
+		page.setContent(CopyUtil.copyList(result.getContent(), Role.class));
 
+		users.setData(page);
 		users.setCode(Code.SC_OK);
 		return users;
 	}

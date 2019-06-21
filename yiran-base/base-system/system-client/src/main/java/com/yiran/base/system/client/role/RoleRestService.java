@@ -1,12 +1,11 @@
 package com.yiran.base.system.client.role;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.reflect.TypeToken;
 import com.yiran.base.core.data.BaseRespData;
+import com.yiran.base.core.data.PageData;
 import com.yiran.base.core.data.PageResponseData;
 import com.yiran.base.core.data.RespData;
 import com.yiran.base.core.util.GsonUtil;
@@ -41,9 +40,9 @@ public class RoleRestService {
 	}
 
 	@SuppressWarnings("serial")
-	public PageResponseData<List<Role>> findPage(RoleQo roleQo, Integer index, Integer size) {
+	public PageResponseData<PageData<Role>> findPage(RoleQo roleQo, Integer index, Integer size) {
 		String json = roleFeignClient.findPage(roleQo, index, size);
-		return GsonUtil.dateGson().fromJson(json, new TypeToken<PageResponseData<List<Role>>>() {
+		return GsonUtil.dateGson().fromJson(json, new TypeToken<PageResponseData<PageData<Role>>>() {
 		}.getType());
 	}
 }

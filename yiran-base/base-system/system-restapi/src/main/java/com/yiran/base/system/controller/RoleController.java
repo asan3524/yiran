@@ -1,6 +1,5 @@
 package com.yiran.base.system.controller;
 
-import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,6 +17,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.yiran.base.core.code.Code;
 import com.yiran.base.core.data.BaseRespData;
+import com.yiran.base.core.data.PageData;
 import com.yiran.base.core.data.PageRequestData;
 import com.yiran.base.core.data.PageResponseData;
 import com.yiran.base.core.data.RespData;
@@ -53,7 +53,7 @@ public class RoleController extends BaseController {
 
 		pageRequest.setData(userQo);
 		pageRequest.setPageable(pageable);
-		PageResponseData<List<Role>> users = roleService.findAll(pageRequest);
+		PageResponseData<PageData<Role>> users = roleService.findAll(pageRequest);
 
 		return response(users);
 	}

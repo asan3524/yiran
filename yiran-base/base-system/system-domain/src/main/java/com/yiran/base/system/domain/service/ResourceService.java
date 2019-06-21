@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.yiran.base.core.code.Code;
 import com.yiran.base.core.data.BaseRespData;
+import com.yiran.base.core.data.PageData;
 import com.yiran.base.core.data.PageRequestData;
 import com.yiran.base.core.data.PageResponseData;
 import com.yiran.base.core.data.RespData;
@@ -110,8 +111,7 @@ public class ResourceService {
 
 	public RespData<Resource> get(String id) {
 		RespData<Resource> rd = new RespData<Resource>();
-		Resource resource = cacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, id,
-				Resource.class);
+		Resource resource = cacheComponent.hashGet(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, id, Resource.class);
 
 		if (null != resource) {
 			rd.setCode(Code.SC_OK);
@@ -120,8 +120,7 @@ public class ResourceService {
 			Optional<ResourceInfo> temp = resourceRepository.findById(id);
 			if (temp.isPresent()) {
 				resource = CopyUtil.copy(temp.get(), Resource.class);
-				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, resource.getId(),
-						resource);
+				cacheComponent.hashPut(Constant.YIRAN_BASE_SYSTEM_CENTER_RESOURCE_ID, resource.getId(), resource);
 
 				rd.setCode(Code.SC_OK);
 				rd.setData(resource);
@@ -133,7 +132,7 @@ public class ResourceService {
 		return rd;
 	}
 
-	public PageResponseData<List<Resource>> findAll(PageRequestData<ResourceQo> pageRequest) {
+	public PageResponseData<PageData<Resource>> findAll(PageRequestData<ResourceQo> pageRequest) {
 
 		Page<ResourceInfo> result = resourceRepository.findAll(new Specification<ResourceInfo>() {
 			private static final long serialVersionUID = 1L;
@@ -162,13 +161,17 @@ public class ResourceService {
 			}
 		}, pageRequest.getPageable());
 
-		PageResponseData<List<Resource>> users = new PageResponseData<List<Resource>>(pageRequest);
+		PageResponseData<PageData<Resource>> resources = new PageResponseData<PageData<Resource>>(pageRequest);
 
-		users.setTotal(result.getTotalElements());
-		users.setNumber(result.getNumberOfElements());
-		users.setData(CopyUtil.copyList(result.getContent(), Resource.class));
+		PageData<Resource> page = new PageData<Resource>();
+		page.setPage(pageRequest.getPageable().getPageNumber());
+		page.setSize(pageRequest.getPageable().getPageSize());
+		page.setTotal(result.getTotalElements());
+		page.setNumber(result.getNumberOfElements());
+		page.setContent(CopyUtil.copyList(result.getContent(), Resource.class));
 
-		users.setCode(Code.SC_OK);
-		return users;
+		resources.setData(page);
+		resources.setCode(Code.SC_OK);
+		return resources;
 	}
 }

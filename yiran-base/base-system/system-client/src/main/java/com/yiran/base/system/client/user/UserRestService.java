@@ -1,12 +1,11 @@
 package com.yiran.base.system.client.user;
 
-import java.util.List;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.google.common.reflect.TypeToken;
 import com.yiran.base.core.data.BaseRespData;
+import com.yiran.base.core.data.PageData;
 import com.yiran.base.core.data.PageResponseData;
 import com.yiran.base.core.data.RespData;
 import com.yiran.base.core.util.GsonUtil;
@@ -48,9 +47,9 @@ public class UserRestService {
 	}
 
 	@SuppressWarnings("serial")
-	public PageResponseData<List<User>> findPage(UserQo userQo, Integer index, Integer size) {
+	public PageResponseData<PageData<User>> findPage(UserQo userQo, Integer index, Integer size) {
 		String json = userFeignClient.findPage(userQo, index, size);
-		return GsonUtil.dateGson().fromJson(json, new TypeToken<PageResponseData<List<User>>>() {
+		return GsonUtil.dateGson().fromJson(json, new TypeToken<PageResponseData<PageData<User>>>() {
 		}.getType());
 	}
 }

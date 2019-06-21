@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.yiran.base.core.code.Code;
 import com.yiran.base.core.data.BaseRespData;
+import com.yiran.base.core.data.PageData;
 import com.yiran.base.core.data.PageRequestData;
 import com.yiran.base.core.data.PageResponseData;
 import com.yiran.base.core.data.RespData;
@@ -226,7 +227,7 @@ public class UserService {
 		return rd;
 	}
 
-	public PageResponseData<List<User>> findPage(PageRequestData<UserQo> pageRequest) {
+	public PageResponseData<PageData<User>> findPage(PageRequestData<UserQo> pageRequest) {
 
 		Page<UserInfo> result = userRepository.findAll(new Specification<UserInfo>() {
 			private static final long serialVersionUID = 1L;
@@ -258,12 +259,16 @@ public class UserService {
 			}
 		}, pageRequest.getPageable());
 
-		PageResponseData<List<User>> users = new PageResponseData<List<User>>(pageRequest);
+		PageResponseData<PageData<User>> users = new PageResponseData<PageData<User>>(pageRequest);
 
-		users.setTotal(result.getTotalElements());
-		users.setNumber(result.getNumberOfElements());
-		users.setData(CopyUtil.copyList(result.getContent(), User.class));
+		PageData<User> page = new PageData<User>();
+		page.setPage(pageRequest.getPageable().getPageNumber());
+		page.setSize(pageRequest.getPageable().getPageSize());
+		page.setTotal(result.getTotalElements());
+		page.setNumber(result.getNumberOfElements());
+		page.setContent(CopyUtil.copyList(result.getContent(), User.class));
 
+		users.setData(page);
 		users.setCode(Code.SC_OK);
 		return users;
 	}
