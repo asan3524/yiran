@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.yiran.base</groupId>
-	<artifactId>base-feign</artifactId>
+	<artifactId>base-feign-auth</artifactId>
 
 	<parent>
 		<groupId>com.yiran</groupId>
@@ -14,17 +14,18 @@
 		<version>1.0.0</version>
 	</parent>
 
-	<name>base-feign</name>
-	<description>base-feign</description>
+	<name>base-feign-auth</name>
+	<description>base-feign-auth</description>
 
 	<dependencies>
 		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
+			<groupId>com.yiran.base</groupId>
+			<artifactId>base-feign</artifactId>
+			<version>1.0.0</version>
 		</dependency>
 		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
+			<groupId>org.springframework.cloud</groupId>
+			<artifactId>spring-cloud-starter-security</artifactId>
 		</dependency>
 	</dependencies>
 </project>

@@ -56,7 +56,7 @@
 		</dependency>
 		<dependency>
 			<groupId>com.yiran.base</groupId>
-			<artifactId>base-feign</artifactId>
+			<artifactId>base-feign-auth</artifactId>
 			<version>1.0.0</version>
 		</dependency>
 		<dependency>

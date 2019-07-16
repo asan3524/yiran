@@ -10,6 +10,7 @@
 		<groupId>com.yiran</groupId>
 		<artifactId>yiran-parent</artifactId>
 		<version>1.0.0</version>
+		<relativePath></relativePath>
 	</parent>
 
 	<properties>
@@ -24,6 +25,7 @@
 		<module>base-sso</module>
 		<module>base-hystrix</module>
 		<module>base-feign</module>
+		<module>base-feign-auth</module>
 		<module>base-ribbon</module>
 		<module>base-zipkin</module>
 		<module>base-system</module>

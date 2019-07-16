@@ -28,14 +28,25 @@ public abstract class BaseController {
 		return response(Code.SC_OK, GsonUtil.dateGson().toJson(data));
 	}
 
-	protected ResponseEntity<String> response(BaseRespData data) {
-		if (null != data.getTransaction()) {
-			return ResponseEntity.status(data.getCode())
-					.header(Transaction.YIRAN_BASE_HEADER_TRANSACTION, data.getTransaction().getTransaction())
-					.header(Transaction.YIRAN_BASE_HEADER_VALIDITY, data.getTransaction().getValidity().toString())
-					.body(GsonUtil.dateGson().toJson(data));
+	protected ResponseEntity<String> responseOk(BaseRespData respData) {
+		if (null != respData.getTransaction()) {
+			return ResponseEntity.status(Code.SC_OK)
+					.header(Transaction.YIRAN_BASE_HEADER_TRANSACTION, respData.getTransaction().getTransaction())
+					.header(Transaction.YIRAN_BASE_HEADER_VALIDITY, respData.getTransaction().getValidity().toString())
+					.body(GsonUtil.dateGson().toJson(respData));
 		} else {
-			return ResponseEntity.status(data.getCode()).body(GsonUtil.dateGson().toJson(data));
+			return ResponseEntity.status(Code.SC_OK).body(GsonUtil.dateGson().toJson(respData));
+		}
+	}
+
+	protected ResponseEntity<String> response(BaseRespData respData) {
+		if (null != respData.getTransaction()) {
+			return ResponseEntity.status(respData.getCode())
+					.header(Transaction.YIRAN_BASE_HEADER_TRANSACTION, respData.getTransaction().getTransaction())
+					.header(Transaction.YIRAN_BASE_HEADER_VALIDITY, respData.getTransaction().getValidity().toString())
+					.body(GsonUtil.dateGson().toJson(respData));
+		} else {
+			return ResponseEntity.status(respData.getCode()).body(GsonUtil.dateGson().toJson(respData));
 		}
 	}
 }

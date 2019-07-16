@@ -6,7 +6,7 @@
 	<modelVersion>4.0.0</modelVersion>
 
 	<groupId>com.yiran.base</groupId>
-	<artifactId>base-feign</artifactId>
+	<artifactId>base-logstash</artifactId>
 
 	<parent>
 		<groupId>com.yiran</groupId>
@@ -14,17 +14,11 @@
 		<version>1.0.0</version>
 	</parent>
 
-	<name>base-feign</name>
-	<description>base-feign</description>
+	<name>base-logstash</name>
+	<description>base-logstash</description>
 
 	<dependencies>
-		<dependency>
-			<groupId>org.springframework.cloud</groupId>
-			<artifactId>spring-cloud-starter-openfeign</artifactId>
-		</dependency>
-		<dependency>
-			<groupId>com.google.code.gson</groupId>
-			<artifactId>gson</artifactId>
-		</dependency>
+
+		
 	</dependencies>
 </project>

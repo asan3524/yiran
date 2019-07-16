@@ -6,7 +6,8 @@ spring:
     name: yiran-demo-provider
   profiles:
     active: develop
-    
+  datasource:    druid:      db-type: 
+      driver-class-name: 
 ---
 spring:
   profiles: develop
