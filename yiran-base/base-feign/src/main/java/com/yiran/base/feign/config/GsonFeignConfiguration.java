@@ -48,10 +48,10 @@ public class GsonFeignConfiguration {
 		}
 	}
 
-	@Bean
-	public Contract feignContract() {
-		return new feign.Contract.Default();
-	}
+//	@Bean
+//	public Contract feignContract() {
+//		return new feign.Contract.Default();
+//	}
 
 	@Bean
 	public Decoder feignDecoder() {

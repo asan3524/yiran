@@ -4,38 +4,34 @@ spring:
       ack:
         destination-service: ${spring.application.name}
 
+server:
+  servlet:
+    session:      cookie:        name: OAUTH2SESSION
+      
 # 单机模式配置
 ---
 spring:
   profiles: develop
+  
+  redis:
+    redisson: false
+    host: 127.0.0.1
+    port: 6379
 
-  cloud:
-    gateway:
-      discovery: 
-        locator:
-          enabled: true
-          lower-case-service-id: true
-      # 跨域
-      globalcors:
-        corsConfigurations:
-          '[/**]':
-            allowedHeaders: "*"
-            allowedOrigins: "*"
-            allowedMethods: 
-              - GET
-                POST
-                DELETE
-                PUT
-                OPTION
-            
-eureka:
+zuul:
+    #排除基于eureka服务ID的路由注册
+  ignored-services: '*'
+    #路由前缀
+  prefix: /api  routes:
+    yiran-demo-consumer: /consumer/**
+            eureka:
   instance:
     instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
     prefer-ip-address: true  
   client:
     service-url:
       defaultZone: http://admin:admin@127.0.0.1:8761/eureka/
-   
+
 security:
   oauth2:
     client:
@@ -47,20 +43,19 @@ security:
     resource:
       jwt:
         key-uri: http://127.0.0.1:8887/oauth/token_key 
-
+           
 management:
   endpoints:
     health:
       show-details: always
     web:
       exposure:
-        include: gateway, health, info
+        include: routes, health, info
                                
 logging:
   level:
     org.springframework.web: INFO
-    root: INFO
-    org.hibernate: INFO
+    com.yiran: INFO
           
 # 集群模式配置
 ---
@@ -93,7 +88,7 @@ management:
       show-details: always
     web:
       exposure:
-        include: gateway, health, info
+        include: routes, health, info
                          
 logging:
   level:

@@ -5,6 +5,7 @@ import java.util.concurrent.CompletableFuture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -77,7 +78,8 @@ public class UserController extends BaseController {
 		if (CommonUtils.isNull(user.getId())) {
 			user.setId(IdUtil.generateId().toString());
 		}
-
+		
+		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 		BaseRespData result = userService.save(user);
 
 		// 保存成功后缓存
@@ -100,6 +102,7 @@ public class UserController extends BaseController {
 			return response(Code.SC_BAD_REQUEST, "id can not bu null");
 		}
 
+		user.setPassword(new BCryptPasswordEncoder().encode(user.getPassword()));
 		BaseRespData result = userService.update(user);
 
 		// 保存成功后缓存

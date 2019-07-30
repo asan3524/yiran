@@ -16,4 +16,8 @@ public class GsonUtil {
 	public static Gson dateGson() {
 		return dateGson(CommonUtils.DATE_TIME_FMT);
 	}
+
+	public static Gson gson() {
+		return new GsonBuilder().create();
+	}
 }

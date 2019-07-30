@@ -6,8 +6,8 @@ spring:
     config:
       server:
         git:
-#          uri: https://github.com/asan3524/yiran-base-config
-          uri: http://192.168.40.160/lsb/yiran-base-config.git
+          uri: https://github.com/asan3524/yiran-base-config
+#          uri: http://192.168.40.160/lsb/yiran-base-config.git
           username: 
           password: 
           clone-on-start: true
