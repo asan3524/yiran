@@ -34,7 +34,7 @@ management:
         include: health, info, bus-refresh
 logging:
   level:
-    org.springframework.web: INFO
+    org.springframework: INFO
            
 # 集群模式配置
 ---
