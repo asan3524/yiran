@@ -37,6 +37,8 @@ public interface DistributedCacheSupport {
 	
 	boolean hashExist(String key, String hashKey);
 
+	<T> T getV(String key, Class<T> clazz);
+	
 	<T> T get(String key, Class<T> clazz);
 
 	<T> T hashGet(String key, String hashKey, Class<T> clazz);

@@ -9,19 +9,34 @@ spring:
       name: admin
       password: admin
   profiles:
-    active: develop
-    
+    active: local
+   
+---
+spring:
+  profiles: local
+  cloud:
+    config:
+      uri: 
+        - http://21.57.226.131:30888
+      profile: local
+      label: master
+  rabbitmq:
+    host: 21.57.226.131
+    port: 30075
+    username: guest
+    password: guest
+     
 ---
 spring:
   profiles: develop
   cloud:
     config:
       uri: 
-        - http://127.0.0.1:8888
+        - http://yiran-base-config.test.svc.cluster.local:8888
       profile: develop
       label: master
   rabbitmq:
-    host: 127.0.0.1
+    host: rabbitmq.test.svc.cluster.local
     port: 5672
     username: guest
     password: guest
@@ -34,7 +49,7 @@ spring:
       uri: 
         - http://yiran-base-config.base.svc.cluster.local:8888
       profile: production
-      label: master  
+      label: master
   rabbitmq:
     host: rabbitmq.base.svc.cluster.local
     port: 5672

@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonIOException;
+import com.yiran.base.core.util.GsonUtil;
 
 import feign.Contract;
 import feign.FeignException;
@@ -48,14 +49,14 @@ public class GsonFeignConfiguration {
 		}
 	}
 
-//	@Bean
-//	public Contract feignContract() {
-//		return new feign.Contract.Default();
-//	}
+	@Bean
+	public Contract feignContract() {
+		return new feign.Contract.Default();
+	}
 
 	@Bean
 	public Decoder feignDecoder() {
-		Gson gson = new Gson();
+		Gson gson = GsonUtil.dateGson();
 		return new GsonDecoder(gson);
 	}
 }

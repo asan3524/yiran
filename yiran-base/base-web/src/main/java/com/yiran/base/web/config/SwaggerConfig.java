@@ -2,6 +2,7 @@ package com.yiran.base.web.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
@@ -34,7 +35,7 @@ public class SwaggerConfig {
 				Class<?> declaringClass = input.declaringClass();
 				if (declaringClass.isAnnotationPresent(RestController.class)) // 注解的类
 					return true;
-				if (input.isAnnotatedWith(ResponseBody.class)) // 注解的方法
+				if (input.isAnnotatedWith(ResponseBody.class) || input.isAnnotatedWith(RequestBody.class)) // 注解的方法
 					return true;
 				return false;
 			}

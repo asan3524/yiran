@@ -38,7 +38,7 @@ public class RedisCacheComponent implements DistributedCacheSupport {
 		String v = objToJson(key, value);
 		BoundValueOperations<String, String> boundValueOperations = redisTemplate.boundValueOps(key);
 		boundValueOperations.set(v);
-		// 设置值之后再增加时间
+		//设置值之后再增加时间
 		boundValueOperations.expire(expiry, TimeUnit.SECONDS);
 	}
 
@@ -64,10 +64,10 @@ public class RedisCacheComponent implements DistributedCacheSupport {
 		String v = objToJson(hashKey, hashValue);
 		BoundHashOperations<String, String, String> boundHashOperations = redisTemplate.boundHashOps(key);
 		boundHashOperations.put(hashKey, v);
-		// 设置值之后再增加时间， 整个hash生效
+		//设置值之后再增加时间， 整个hash生效
 		boundHashOperations.expire(expiry, TimeUnit.SECONDS);
 	}
-
+	
 	@Override
 	public void hashPut(String key, Map<String, String> values) {
 		// TODO Auto-generated method stub
@@ -75,14 +75,14 @@ public class RedisCacheComponent implements DistributedCacheSupport {
 		BoundHashOperations<String, String, String> boundHashOperations = redisTemplate.boundHashOps(key);
 		boundHashOperations.putAll(values);
 	}
-
+	
 	@Override
 	public void hashPut(String key, Map<String, String> values, Integer expiry) {
 		// TODO Auto-generated method stub
 		checkRedisKey(key);
 		BoundHashOperations<String, String, String> boundHashOperations = redisTemplate.boundHashOps(key);
 		boundHashOperations.putAll(values);
-		// 设置值之后再增加时间， 整个hash生效
+		//设置值之后再增加时间， 整个hash生效
 		boundHashOperations.expire(expiry, TimeUnit.SECONDS);
 	}
 
@@ -96,6 +96,15 @@ public class RedisCacheComponent implements DistributedCacheSupport {
 		return false;
 	}
 
+	@Override
+	public <T> T getV(String key, Class<T> clazz) {
+		// TODO Auto-generated method stub
+		if (redisTemplate.hasKey(key)) {
+			return jsonToObj(redisTemplate.opsForValue().get(key), clazz);
+		}
+		return null;
+	}
+	
 	@Override
 	public <T> T get(String key, Class<T> clazz) {
 		// TODO Auto-generated method stub
@@ -181,10 +190,10 @@ public class RedisCacheComponent implements DistributedCacheSupport {
 		String v = objToJson(key, listValue);
 		BoundListOperations<String, String> boundListOperations = redisTemplate.boundListOps(key);
 		boundListOperations.set(index, v);
-		// 设置值之后再增加时间， 整个list生效
+		//设置值之后再增加时间， 整个list生效
 		boundListOperations.expire(expiry, TimeUnit.SECONDS);
 	}
-
+	
 	@Override
 	public <T> void listPush(String key, T listValue) {
 		// TODO Auto-generated method stub
@@ -201,10 +210,10 @@ public class RedisCacheComponent implements DistributedCacheSupport {
 		String v = objToJson(key, listValue);
 		BoundListOperations<String, String> boundListOperations = redisTemplate.boundListOps(key);
 		boundListOperations.leftPush(v);
-		// 设置值之后再增加时间， 整个list生效
+		//设置值之后再增加时间， 整个list生效
 		boundListOperations.expire(expiry, TimeUnit.SECONDS);
 	}
-
+	
 	@Override
 	public <T> T listLeftPop(String key, Class<T> clazz) {
 		// TODO Auto-generated method stub
