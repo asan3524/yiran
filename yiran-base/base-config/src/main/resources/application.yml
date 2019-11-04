@@ -1,29 +1,29 @@
-# 单机模式配置
+#本地测试
 ---
 spring:
-  profiles: develop
+  profiles: local
   cloud:
     config:
       server:
         git:
-          uri: https://github.com/asan3524/yiran-base-config
-#          uri: http://192.168.40.160/lsb/yiran-base-config.git
-          username: 
-          password: 
+#          uri: https://github.com/asan3524/yiran-base-config
+          uri: http://10.233.148.132:30079/bdyw/config.git
+          username: config
+          password: config!@#$
           clone-on-start: true
     # 通过端点 /bus-refresh 刷新配置(基于bus)
     bus:
       trace:
         enabled: true
   rabbitmq:
-    host: 127.0.0.1
+    host: rabbitmq.local.svc.cluster.local
     port: 5672
     username: guest
     password: guest
 eureka:
   client:
     service-url:
-      defaultZone: http://admin:admin@127.0.0.1:8761/eureka/
+      defaultZone: http://admin:admin@yiran-base-eureka.local.svc.cluster.local:8761/eureka/
   instance:
     instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
     prefer-ip-address: true
@@ -34,7 +34,45 @@ management:
         include: health, info, bus-refresh
 logging:
   level:
-    org.springframework: INFO
+    org.springframework.web: INFO
+    
+# 单机模式配置
+---
+spring:
+  profiles: develop
+  cloud:
+    config:
+      server:
+        git:
+#          uri: https://github.com/asan3524/yiran-base-config
+          uri: http://10.233.148.132:30079/bdyw/config.git
+          username: config
+          password: config!@#$
+          clone-on-start: true
+    # 通过端点 /bus-refresh 刷新配置(基于bus)
+    bus:
+      trace:
+        enabled: true
+  rabbitmq:
+    host: rabbitmq.develop.svc.cluster.local
+    port: 5672
+    username: guest
+    password: guest
+eureka:
+  client:
+    service-url:
+      defaultZone: http://admin:admin@yiran-base-eureka.develop.svc.cluster.local:8761/eureka/
+  instance:
+    instance-id: ${spring.application.name}:${spring.cloud.client.ip-address}:${server.port}
+    prefer-ip-address: true
+management:
+ endpoints:
+    web:
+      exposure:
+        include: health, info, bus-refresh
+logging:
+  level:
+    org.springframework.web: INFO
            
 # 集群模式配置
 ---
@@ -44,9 +82,9 @@ spring:
     config:
       server:
         git:
-          uri: http://192.168.40.160/lsb/yiran-base-config.git
-          username: 
-          password: 
+          uri: http://10.233.148.132:30079/bdyw/config.git
+          username: config
+          password: config!@#$
           clone-on-start: true
     bus:
       trace:

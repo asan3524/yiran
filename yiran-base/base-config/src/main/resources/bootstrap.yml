@@ -5,4 +5,4 @@ spring:
   application:
     name: yiran-base-config
   profiles:
-    active: develop
+    active: local

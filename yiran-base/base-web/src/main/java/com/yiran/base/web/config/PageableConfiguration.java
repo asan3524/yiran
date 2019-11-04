@@ -42,7 +42,7 @@ public class PageableConfiguration {
 	
 	@ApiModel
 	static class Page {
-		@ApiModelProperty("第几页(0..N)")
+		@ApiModelProperty("第几页(1..N)")
 		private Integer page;
 
 		@ApiModelProperty("每页多少条")
